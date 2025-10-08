@@ -1,490 +1,322 @@
-local library = {}
-local tabs = {}
-local sections = {left = {}, right = {}}
-local Dragging = false
-local DragStart = nil
-local DragStartPosition = nil
-local currentTab = nil
-local currentWindow = nil
-local isOpen = true
+local Library = {}
 
--- Helper function to create rounded corners
-local function createCorner(parent, radius)
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, radius)
-    corner.Parent = parent
-    return corner
-end
-
--- Helper function to create stroke
-local function createStroke(parent, color, thickness)
-    local stroke = Instance.new("UIStroke")
-    stroke.Color = color
-    stroke.Thickness = thickness
-    stroke.Parent = parent
-    return stroke
-end
-
--- Helper function to get color from hex
-local function ColorFromHex(hex)
-    hex = hex:gsub("#", "")
-    return Color3.fromRGB(
-        tonumber(hex:sub(1, 2), 16),
-        tonumber(hex:sub(3, 4), 16),
-        tonumber(hex:sub(5, 6), 16)
-    )
-end
-
--- Create the main UI
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
-local MainFrame = Instance.new("Frame")
-MainFrame.ClipsDescendants = true
-MainFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-MainFrame.Name = "MainFrame"
-MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-MainFrame.Size = UDim2.new(0, 660, 0, 456)
-MainFrame.BorderSizePixel = 0
-MainFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 20)
-MainFrame.Parent = ScreenGui
-
-createCorner(MainFrame, 6)
-
--- Header
-local Header = Instance.new("Frame")
-Header.ClipsDescendants = true
-Header.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Header.AnchorPoint = Vector2.new(0.5, 0)
-Header.Name = "Header"
-Header.Position = UDim2.new(0.5, 0, 0, 0)
-Header.Size = UDim2.new(0, 660, 0, 49)
-Header.BorderSizePixel = 0
-Header.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
-Header.Parent = MainFrame
-
-createCorner(Header, 6)
-
--- Header line
-local Liner = Instance.new("Frame")
-Liner.AnchorPoint = Vector2.new(0.5, 1)
-Liner.Name = "Liner"
-Liner.Position = UDim2.new(0.5, 0, 1, 0)
-Liner.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Liner.Size = UDim2.new(1, 1, 0, 1)
-Liner.BorderSizePixel = 0
-Liner.BackgroundColor3 = Color3.fromRGB(35, 35, 39)
-Liner.Parent = Header
-
--- Exit button
-local Exit_Button = Instance.new("ImageLabel")
-Exit_Button.ScaleType = Enum.ScaleType.Fit
-Exit_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Exit_Button.Name = "Exit_Button"
-Exit_Button.AnchorPoint = Vector2.new(1, 0.5)
-Exit_Button.Image = "rbxassetid://115079070282476"
-Exit_Button.BackgroundTransparency = 1
-Exit_Button.Position = UDim2.new(1, -15, 0.5, 0)
-Exit_Button.Size = UDim2.new(0, 16, 0, 16)
-Exit_Button.BorderSizePixel = 0
-Exit_Button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Exit_Button.Parent = Header
-
--- Library name
-local Dropdown_Name = Instance.new("TextLabel")
-Dropdown_Name.RichText = true
-Dropdown_Name.TextColor3 = Color3.fromRGB(255, 255, 255)
-Dropdown_Name.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Dropdown_Name.Text = 'Flx<font color="#6e75f4">Hub</font>'
-Dropdown_Name.Name = "Dropdown_Name"
-Dropdown_Name.Size = UDim2.new(0, 1, 0, 1)
-Dropdown_Name.AnchorPoint = Vector2.new(0, 0.5)
-Dropdown_Name.BorderSizePixel = 0
-Dropdown_Name.BackgroundTransparency = 1
-Dropdown_Name.Position = UDim2.new(0, 50, 0.5, 0)
-Dropdown_Name.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
-Dropdown_Name.AutomaticSize = Enum.AutomaticSize.XY
-Dropdown_Name.TextSize = 18
-Dropdown_Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Dropdown_Name.Parent = Header
-
--- Logo container
-local LogoContainer = Instance.new("Frame")
-LogoContainer.ClipsDescendants = true
-LogoContainer.BorderColor3 = Color3.fromRGB(0, 0, 0)
-LogoContainer.AnchorPoint = Vector2.new(0.5, 0)
-LogoContainer.BackgroundTransparency = 1
-LogoContainer.Position = UDim2.new(0.06818182021379471, 0, 0, 0)
-LogoContainer.Name = "LogoContainer"
-LogoContainer.Size = UDim2.new(0, 90, 0, 49)
-LogoContainer.BorderSizePixel = 0
-LogoContainer.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-LogoContainer.Parent = MainFrame
-
--- Logo
-local Logo = Instance.new("ImageLabel")
-Logo.ScaleType = Enum.ScaleType.Fit
-Logo.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Logo.Name = "Logo"
-Logo.Size = UDim2.new(0, 30, 0, 30)
-Logo.AnchorPoint = Vector2.new(0.5, 0.5)
-Logo.Position = UDim2.new(0.5, 0, 0.5, 0)
-Logo.BorderSizePixel = 0
-Logo.BackgroundTransparency = 1
-Logo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Logo.Parent = LogoContainer
-
--- Tab container
-local TabContainer = Instance.new("Frame")
-TabContainer.ClipsDescendants = true
-TabContainer.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TabContainer.AnchorPoint = Vector2.new(0, 0)
-TabContainer.Name = "TabContainer"
-TabContainer.Position = UDim2.new(0, 0, 0, 49)
-TabContainer.Size = UDim2.new(0, 660, 0, 40)
-TabContainer.BorderSizePixel = 0
-TabContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 23)
-TabContainer.Parent = MainFrame
-
--- Tab list layout
-local TabListLayout = Instance.new("UIListLayout")
-TabListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-TabListLayout.FillDirection = Enum.FillDirection.Horizontal
-TabListLayout.Padding = UDim.new(0, 0)
-TabListLayout.Parent = TabContainer
-
--- Content area
-local ContentArea = Instance.new("Frame")
-ContentArea.ClipsDescendants = true
-ContentArea.BorderColor3 = Color3.fromRGB(0, 0, 0)
-ContentArea.AnchorPoint = Vector2.new(0, 0)
-ContentArea.Name = "ContentArea"
-ContentArea.Position = UDim2.new(0, 0, 0, 89)
-ContentArea.Size = UDim2.new(0, 660, 0, 367)
-ContentArea.BorderSizePixel = 0
-ContentArea.BackgroundColor3 = Color3.fromRGB(18, 18, 20)
-ContentArea.Parent = MainFrame
-
--- Content scrolling frame
-local ContentScrollingFrame = Instance.new("ScrollingFrame")
-ContentScrollingFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-ContentScrollingFrame.ScrollBarThickness = 0
-ContentScrollingFrame.AnchorPoint = Vector2.new(0, 0)
-ContentScrollingFrame.Size = UDim2.new(1, 0, 1, 0)
-ContentScrollingFrame.BorderSizePixel = 0
-ContentScrollingFrame.BackgroundTransparency = 1
-ContentScrollingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-ContentScrollingFrame.Parent = ContentArea
-
--- Content list layout
-local ContentListLayout = Instance.new("UIListLayout")
-ContentListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-ContentListLayout.Padding = UDim.new(0, 10)
-ContentListLayout.Parent = ContentScrollingFrame
-
--- Content padding
-local ContentPadding = Instance.new("UIPadding")
-ContentPadding.PaddingTop = UDim.new(0, 10)
-ContentPadding.PaddingBottom = UDim.new(0, 10)
-ContentPadding.PaddingLeft = UDim.new(0, 10)
-ContentPadding.PaddingRight = UDim.new(0, 10)
-ContentPadding.Parent = ContentScrollingFrame
-
--- Drag functionality
-local function makeDraggable(frame)
-    local UserInputService = game:GetService("UserInputService")
-    
-    frame.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            Dragging = true
-            DragStart = input.Position
-            DragStartPosition = frame.Position
-        end
-    end)
-    
-    UserInputService.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseMovement and Dragging then
-            local delta = input.Position - DragStart
-            frame.Position = UDim2.new(DragStartPosition.X.Scale, DragStartPosition.X.Offset + delta.X, DragStartPosition.Y.Scale, DragStartPosition.Y.Offset + delta.Y)
-        end
-    end)
-    
-    UserInputService.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            Dragging = false
-        end
-    end)
-end
-
--- Make main frame draggable
-makeDraggable(MainFrame)
-
--- Toggle UI visibility
-local function toggleUI()
-    isOpen = not isOpen
-    ScreenGui.Enabled = isOpen
-end
-
--- Exit button functionality
-Exit_Button.MouseButton1Click:Connect(toggleUI)
-
--- Keybind functionality
+local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
-local currentKeybind = "Insert"
 
-local function setupKeybind(keybind)
-    currentKeybind = keybind
-    UserInputService.InputBegan:Connect(function(input, gameProcessed)
-        if gameProcessed then return end
-        if input.KeyCode == Enum.KeyCode[keybind] then
-            toggleUI()
-        end
-    end)
+local function keycodeFrom(value)
+	if typeof(value) == "EnumItem" and value.EnumType == Enum.KeyCode then
+		return value
+	end
+	if typeof(value) == "string" then
+		local upper = string.upper(value)
+		return Enum.KeyCode[upper]
+	end
+	return Enum.KeyCode.RightShift
 end
 
--- Library functions
-function library:CreateWindow(config)
-    local library_config = config.library_config or {}
-    
-    -- Set library name
-    if library_config.Cheat_Name then
-        Dropdown_Name.Text = library_config.Cheat_Name
-    end
-    
-    -- Set library icon
-    if library_config.Cheat_Icon then
-        Logo.Image = library_config.Cheat_Icon
-    end
-    
-    -- Set accent color
-    if library_config.AccentColor then
-        local accentColor = ColorFromHex(library_config.AccentColor)
-        -- Apply accent color to various elements
-    end
-    
-    -- Setup keybind
-    if library_config.interface_keybind then
-        setupKeybind(library_config.interface_keybind)
-    end
-    
-    currentWindow = {
-        config = library_config,
-        tabs = {}
-    }
-    
-    return {
-        CreateTab = function(tabName)
-            return library:CreateTab(tabName)
-        end
-    }
+local function fromHex(hex)
+	hex = hex:gsub("#", "")
+	local r = tonumber(hex:sub(1, 2), 16) or 110
+	local g = tonumber(hex:sub(3, 4), 16) or 117
+	local b = tonumber(hex:sub(5, 6), 16) or 244
+	return Color3.fromRGB(r, g, b)
 end
 
-function library:CreateTab(tabName)
-    local tabFrame = Instance.new("TextButton")
-    tabFrame.Name = tabName
-    tabFrame.Size = UDim2.new(0, 100, 1, 0)
-    tabFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
-    tabFrame.BorderSizePixel = 0
-    tabFrame.Text = tabName
-    tabFrame.TextColor3 = Color3.fromRGB(255, 255, 255)
-    tabFrame.TextSize = 14
-    tabFrame.Font = Enum.Font.Gotham
-    tabFrame.Parent = TabContainer
-    
-    createCorner(tabFrame, 4)
-    
-    -- Tab content frame
-    local tabContentFrame = Instance.new("Frame")
-    tabContentFrame.Name = tabName .. "_Content"
-    tabContentFrame.Size = UDim2.new(1, 0, 1, 0)
-    tabContentFrame.BackgroundTransparency = 1
-    tabContentFrame.Visible = false
-    tabContentFrame.Parent = ContentScrollingFrame
-    
-    -- Tab content list layout
-    local tabContentLayout = Instance.new("UIListLayout")
-    tabContentLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    tabContentLayout.Padding = UDim.new(0, 10)
-    tabContentLayout.Parent = tabContentFrame
-    
-    -- Tab switching functionality
-    tabFrame.MouseButton1Click:Connect(function()
-        -- Hide all tab contents
-        for _, child in pairs(ContentScrollingFrame:GetChildren()) do
-            if child:IsA("Frame") and child.Name:find("_Content") then
-                child.Visible = false
-            end
-        end
-        
-        -- Reset all tab button colors
-        for _, child in pairs(TabContainer:GetChildren()) do
-            if child:IsA("TextButton") then
-                child.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
-                child.TextColor3 = Color3.fromRGB(255, 255, 255)
-            end
-        end
-        
-        -- Show selected tab content
-        tabContentFrame.Visible = true
-        tabFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 39)
-        tabFrame.TextColor3 = Color3.fromRGB(110, 117, 244)
-        
-        currentTab = tabName
-    end)
-    
-    -- Store tab reference
-    if currentWindow then
-        currentWindow.tabs[tabName] = {
-            frame = tabFrame,
-            content = tabContentFrame
-        }
-    end
-    
-    -- Show first tab by default
-    if not currentTab then
-        tabContentFrame.Visible = true
-        tabFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 39)
-        tabFrame.TextColor3 = Color3.fromRGB(110, 117, 244)
-        currentTab = tabName
-    end
-    
-    return {
-        CreateSection = function(sectionConfig)
-            return library:CreateSection(sectionConfig, tabContentFrame)
-        end
-    }
+function Library:CreateWindow(options)
+	options = options or {}
+	local cfg = options.library_config or {}
+	local cheatName = cfg.Cheat_Name or "Library"
+	local cheatIcon = cfg.Cheat_Icon or "rbxassetid://0"
+	local accent = fromHex(cfg.AccentColor or "#6e75f4")
+	local toggleKey = keycodeFrom(cfg.interface_keybind or "RightShift")
+
+	local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+
+	local screenGui = Instance.new("ScreenGui")
+	screenGui.Name = "FLYUILibrary"
+	screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	screenGui.ResetOnSpawn = false
+	screenGui.Enabled = true
+	screenGui.Parent = playerGui
+
+	local main = Instance.new("Frame")
+	main.Name = "MainFrame"
+	main.AnchorPoint = Vector2.new(0.5, 0.5)
+	main.Position = UDim2.new(0.5, 0, 0.5, 0)
+	main.Size = UDim2.new(0, 660, 0, 456)
+	main.BackgroundColor3 = Color3.fromRGB(18, 18, 20)
+	main.BorderSizePixel = 0
+	main.Parent = screenGui
+
+	local mainCorner = Instance.new("UICorner")
+	mainCorner.CornerRadius = UDim.new(0, 6)
+	mainCorner.Parent = main
+
+	local header = Instance.new("Frame")
+	header.Name = "Header"
+	header.Size = UDim2.new(1, 0, 0, 49)
+	header.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+	header.BorderSizePixel = 0
+	header.Parent = main
+
+	local headerCorner = Instance.new("UICorner")
+	headerCorner.CornerRadius = UDim.new(0, 6)
+	headerCorner.Parent = header
+
+	local headerLine = Instance.new("Frame")
+	headerLine.Name = "Liner"
+	headerLine.AnchorPoint = Vector2.new(0.5, 1)
+	headerLine.Position = UDim2.new(0.5, 0, 1, 0)
+	headerLine.Size = UDim2.new(1, 1, 0, 1)
+	headerLine.BorderSizePixel = 0
+	headerLine.BackgroundColor3 = Color3.fromRGB(35, 35, 39)
+	headerLine.Parent = header
+
+	local logoWrap = Instance.new("Frame")
+	logoWrap.Name = "LogoContainer"
+	logoWrap.Size = UDim2.new(0, 90, 0, 49)
+	logoWrap.BackgroundTransparency = 1
+	logoWrap.Parent = main
+
+	local logo = Instance.new("ImageLabel")
+	logo.Name = "Logo"
+	logo.BackgroundTransparency = 1
+	logo.AnchorPoint = Vector2.new(0, 0.5)
+	logo.Position = UDim2.new(0, 15, 0.5, 0)
+	logo.Size = UDim2.new(0, 28, 0, 28)
+	logo.Image = cheatIcon
+	logo.Parent = logoWrap
+
+	local title = Instance.new("TextLabel")
+	title.Name = "Title"
+	title.BackgroundTransparency = 1
+	title.AnchorPoint = Vector2.new(0, 0)
+	title.Position = UDim2.new(0, 50, 0, 0)
+	title.Size = UDim2.new(0, 1, 1, 0)
+	title.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+	title.TextSize = 18
+	title.TextColor3 = Color3.fromRGB(255, 255, 255)
+	title.TextXAlignment = Enum.TextXAlignment.Left
+	title.Text = cheatName
+	title.Parent = header
+
+	local sideBar = Instance.new("Frame")
+	sideBar.Name = "Side_Bar"
+	sideBar.BackgroundTransparency = 1
+	sideBar.Size = UDim2.new(0, 143, 0, 406)
+	sideBar.Position = UDim2.new(0, 0, 0, 50)
+	sideBar.Parent = main
+
+	local sideList = Instance.new("UIListLayout")
+	sideList.SortOrder = Enum.SortOrder.LayoutOrder
+	sideList.Padding = UDim.new(0, 10)
+	sideList.Parent = sideBar
+
+	local sidePad = Instance.new("UIPadding")
+	sidePad.PaddingTop = UDim.new(0, 12)
+	sidePad.PaddingLeft = UDim.new(0, 12)
+	sidePad.Parent = sideBar
+
+	local pages = Instance.new("Frame")
+	pages.Name = "Pages"
+	pages.BackgroundTransparency = 1
+	pages.AnchorPoint = Vector2.new(1, 1)
+	pages.Position = UDim2.new(1, 0, 1, -1)
+	pages.Size = UDim2.new(0, 515, 0, 407)
+	pages.Parent = main
+
+	local dragging = false
+	local dragOffset
+
+	header.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			dragging = true
+			dragOffset = input.Position - main.AbsolutePosition
+		end
+	end)
+
+	UserInputService.InputEnded:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			dragging = false
+		end
+	end)
+
+	UserInputService.InputChanged:Connect(function(input)
+		if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+			local newPos = input.Position - dragOffset
+			main.Position = UDim2.fromOffset(newPos.X, newPos.Y)
+		end
+	end)
+
+	UserInputService.InputBegan:Connect(function(input, gpe)
+		if gpe then return end
+		if input.KeyCode == toggleKey then
+			screenGui.Enabled = not screenGui.Enabled
+		end
+	end)
+
+	local window = {}
+	window._screenGui = screenGui
+	window._main = main
+	window._header = header
+	window._sideBar = sideBar
+	window._pages = pages
+	window._tabs = {}
+
+	function window:CreateTab(tabName)
+		tabName = tabName or "Tab"
+		local button = Instance.new("TextButton")
+		button.Name = "TabButton"
+		button.Text = tabName
+		button.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+		button.TextSize = 16
+		button.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+		button.TextColor3 = Color3.fromRGB(255, 255, 255)
+		button.Size = UDim2.new(0, 127, 0, 36)
+		button.BorderSizePixel = 0
+		button.Parent = sideBar
+
+		local bPad = Instance.new("UIPadding")
+		bPad.PaddingTop = UDim.new(0, 12)
+		bPad.PaddingBottom = UDim.new(0, 12)
+		bPad.PaddingLeft = UDim.new(0, 40)
+		bPad.PaddingRight = UDim.new(0, 40)
+		bPad.Parent = button
+
+		local bCorner = Instance.new("UICorner")
+		bCorner.CornerRadius = UDim.new(0, 2)
+		bCorner.Parent = button
+
+		local page = Instance.new("ScrollingFrame")
+		page.Name = "Page"
+		page.Visible = false
+		page.BackgroundTransparency = 1
+		page.Size = UDim2.new(1, 0, 1, 0)
+		page.ScrollBarThickness = 0
+		page.Parent = pages
+
+		local content = Instance.new("Frame")
+		content.Name = "Content"
+		content.BackgroundTransparency = 1
+		content.Size = UDim2.new(1, 0, 1, 0)
+		content.Parent = page
+
+		local contentList = Instance.new("UIListLayout")
+		contentList.FillDirection = Enum.FillDirection.Horizontal
+		contentList.SortOrder = Enum.SortOrder.LayoutOrder
+		contentList.Padding = UDim.new(0, 12)
+		contentList.Parent = content
+
+		local contentPad = Instance.new("UIPadding")
+		contentPad.PaddingTop = UDim.new(0, 12)
+		contentPad.PaddingLeft = UDim.new(0, 6)
+		contentPad.Parent = content
+
+		local tab = {}
+		tab._button = button
+		tab._page = page
+		tab._content = content
+		tab._sections = { left = nil, right = nil }
+
+		local function activate()
+			for _, t in ipairs(window._tabs) do
+				t._page.Visible = false
+				t._button.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+			end
+			page.Visible = true
+			button.BackgroundColor3 = accent
+		end
+
+		button.MouseButton1Click:Connect(activate)
+
+		function tab:CreateSection(props)
+			props = props or {}
+			local position = (props.position or "left"):lower()
+			local sectionText = props.SectionText or "Section"
+
+			local sectionFrame = Instance.new("Frame")
+			sectionFrame.Size = UDim2.new(0, 242, 0, 70)
+			sectionFrame.AutomaticSize = Enum.AutomaticSize.Y
+			sectionFrame.BackgroundColor3 = Color3.fromRGB(21, 21, 23)
+			sectionFrame.BorderSizePixel = 0
+
+			local sectionCorner = Instance.new("UICorner")
+			sectionCorner.CornerRadius = UDim.new(0, 4)
+			sectionCorner.Parent = sectionFrame
+
+			local headerFrame = Instance.new("Frame")
+			headerFrame.Name = "Header"
+			headerFrame.Size = UDim2.new(0, 242, 0, 34)
+			headerFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+			headerFrame.BorderSizePixel = 0
+			headerFrame.Parent = sectionFrame
+
+			local headerCorner2 = Instance.new("UICorner")
+			headerCorner2.CornerRadius = UDim.new(0, 4)
+			headerCorner2.Parent = headerFrame
+
+			local nameLabel = Instance.new("TextLabel")
+			nameLabel.Name = "Section_Name"
+			nameLabel.BackgroundTransparency = 1
+			nameLabel.Position = UDim2.new(0, 12, 0, 0)
+			nameLabel.Size = UDim2.new(0, 1, 1, 0)
+			nameLabel.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+			nameLabel.TextSize = 14
+			nameLabel.TextXAlignment = Enum.TextXAlignment.Left
+			nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+			nameLabel.Text = sectionText
+			nameLabel.Parent = headerFrame
+
+			local holder = Instance.new("Frame")
+			holder.Name = "Holder"
+			holder.AnchorPoint = Vector2.new(0.5, 0)
+			holder.Position = UDim2.new(0.5, 0, 1, 0)
+			holder.Size = UDim2.new(1, 1, 0, 1)
+			holder.BackgroundTransparency = 1
+			holder.Parent = headerFrame
+
+			local list = Instance.new("UIListLayout")
+			list.SortOrder = Enum.SortOrder.LayoutOrder
+			list.Padding = UDim.new(0, 4)
+			list.Parent = holder
+
+			sectionFrame.Parent = tab._content
+
+			local section = {}
+			section._frame = sectionFrame
+			section._holder = holder
+
+			function section:CreateToggleKeybind() return {} end
+			function section:CreateSlider() return {} end
+			function section:CreateColorpicker() return {} end
+			function section:CreateDropdown() return {} end
+			function section:CreateMultiDropdown() return {} end
+			function section:CreateButton() return {} end
+			function section:CreateToggleWithColor() return {} end
+
+			if position == "left" then
+				tab._sections.left = section
+			else
+				tab._sections.right = section
+			end
+
+			return section
+		end
+
+		table.insert(window._tabs, tab)
+		if #window._tabs == 1 then
+			page.Visible = true
+			button.BackgroundColor3 = accent
+		end
+
+		return tab
+	end
+
+	return window
 end
 
-function library:CreateSection(sectionConfig, parent)
-    local position = sectionConfig.position or "left"
-    local sectionText = sectionConfig.SectionText or "Section"
-    
-    local sectionFrame = Instance.new("Frame")
-    sectionFrame.Name = sectionText .. "_Section"
-    sectionFrame.Size = UDim2.new(0.48, 0, 0, 200)
-    sectionFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
-    sectionFrame.BorderSizePixel = 0
-    sectionFrame.Parent = parent
-    
-    createCorner(sectionFrame, 6)
-    createStroke(sectionFrame, Color3.fromRGB(30, 30, 34), 1)
-    
-    -- Section header
-    local sectionHeader = Instance.new("Frame")
-    sectionHeader.Name = "Header"
-    sectionHeader.Size = UDim2.new(1, 0, 0, 30)
-    sectionHeader.BackgroundColor3 = Color3.fromRGB(30, 30, 34)
-    sectionHeader.BorderSizePixel = 0
-    sectionHeader.Parent = sectionFrame
-    
-    createCorner(sectionHeader, 6)
-    
-    -- Section title
-    local sectionTitle = Instance.new("TextLabel")
-    sectionTitle.Name = "Title"
-    sectionTitle.Size = UDim2.new(1, -20, 1, 0)
-    sectionTitle.Position = UDim2.new(0, 10, 0, 0)
-    sectionTitle.BackgroundTransparency = 1
-    sectionTitle.Text = sectionText
-    sectionTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-    sectionTitle.TextSize = 14
-    sectionTitle.Font = Enum.Font.Gotham
-    sectionTitle.TextXAlignment = Enum.TextXAlignment.Left
-    sectionTitle.Parent = sectionHeader
-    
-    -- Section content area
-    local sectionContent = Instance.new("ScrollingFrame")
-    sectionContent.Name = "Content"
-    sectionContent.Size = UDim2.new(1, -10, 1, -40)
-    sectionContent.Position = UDim2.new(0, 5, 0, 35)
-    sectionContent.BackgroundTransparency = 1
-    sectionContent.BorderSizePixel = 0
-    sectionContent.ScrollBarThickness = 0
-    sectionContent.Parent = sectionFrame
-    
-    -- Section content layout
-    local sectionContentLayout = Instance.new("UIListLayout")
-    sectionContentLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    sectionContentLayout.Padding = UDim.new(0, 5)
-    sectionContentLayout.Parent = sectionContent
-    
-    -- Section content padding
-    local sectionContentPadding = Instance.new("UIPadding")
-    sectionContentPadding.PaddingTop = UDim.new(0, 5)
-    sectionContentPadding.PaddingBottom = UDim.new(0, 5)
-    sectionContentPadding.Parent = sectionContent
-    
-    -- Position section based on position parameter
-    if position == "right" then
-        sectionFrame.Position = UDim2.new(0.52, 0, 0, 0)
-    else
-        sectionFrame.Position = UDim2.new(0, 0, 0, 0)
-    end
-    
-    return {
-        CreateToggleKeybind = function(config)
-            return library:CreateToggleKeybind(config, sectionContent)
-        end,
-        CreateSlider = function(config)
-            return library:CreateSlider(config, sectionContent)
-        end,
-        CreateColorpicker = function(config)
-            return library:CreateColorpicker(config, sectionContent)
-        end,
-        CreateDropdown = function(config)
-            return library:CreateDropdown(config, sectionContent)
-        end,
-        CreateMultiDropdown = function(config)
-            return library:CreateMultiDropdown(config, sectionContent)
-        end,
-        CreateButton = function(config)
-            return library:CreateButton(config, sectionContent)
-        end,
-        CreateToggleWithColor = function(config)
-            return library:CreateToggleWithColor(config, sectionContent)
-        end
-    }
-end
+_G = _G or {}
+_G.library = Library
+_G.libary = Library
 
--- Placeholder functions for other components
-function library:CreateToggleKeybind(config, parent)
-    -- Placeholder function - does nothing for now
-    return {}
-end
-
-function library:CreateSlider(config, parent)
-    -- Placeholder function - does nothing for now
-    return {}
-end
-
-function library:CreateColorpicker(config, parent)
-    -- Placeholder function - does nothing for now
-    return {}
-end
-
-function library:CreateDropdown(config, parent)
-    -- Placeholder function - does nothing for now
-    return {}
-end
-
-function library:CreateMultiDropdown(config, parent)
-    -- Placeholder function - does nothing for now
-    return {}
-end
-
-function library:CreateButton(config, parent)
-    -- Placeholder function - does nothing for now
-    return {}
-end
-
-function library:CreateToggleWithColor(config, parent)
-    -- Placeholder function - does nothing for now
-    return {}
-end
-
--- Initialize the UI
-ScreenGui.Enabled = true
-
-return library
+return Library
