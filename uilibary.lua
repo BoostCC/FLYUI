@@ -230,7 +230,7 @@ function libary:CreateWindow(config)
     
     Exit_Button.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            MainFrame.Visible = false
+            ScreenGui:Destroy()
         end
     end)
     
