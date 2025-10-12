@@ -613,6 +613,11 @@ Slider_Value.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         local percentage = (slider.value - slider.min) / (slider.max - slider.min)
         local progressWidth = 222 * percentage
         
+        -- Ensure minimum visible width when at minimum value
+        if slider.value == slider.min and slider.min ~= slider.max then
+            progressWidth = 2
+        end
+        
         Progress_Bar.Size = UDim2.new(0, progressWidth, 0, 15)
         Slider_Value.Text = tostring(math.floor(slider.value + 0.5))
         
@@ -706,7 +711,7 @@ MultiDropdown_Component.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     Dropdown.Text = ""
     Dropdown.TextTransparency = 1
     Dropdown.AutoButtonColor = false
-    Dropdown.Active = false
+    Dropdown.Active = true
     Dropdown.SelectionImageObject = nil
     Dropdown.Parent = MultiDropdown_Component
 
