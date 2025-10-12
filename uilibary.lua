@@ -745,7 +745,7 @@ function Section:CreateMultidropdown(config)
     Container.BorderColor3 = Color3.fromRGB(0, 0, 0)
     Container.Size = UDim2.new(0, 218, 0, 0)
     Container.Name = "Container"
-    Container.Position = UDim2.new(0, 12, 1, 30)
+    Container.Position = UDim2.new(0, 12, 0, 52)
     Container.BorderSizePixel = 0
     Container.ZIndex = 50
     Container.AutomaticSize = Enum.AutomaticSize.Y
@@ -781,6 +781,12 @@ function Section:CreateMultidropdown(config)
     local function toggleDropdown()
         multidropdown.open = not multidropdown.open
         Container.Visible = multidropdown.open
+        
+        if multidropdown.open then
+            Container.Size = UDim2.new(0, 218, 0, #multidropdown.options * 25 + 13)
+        else
+            Container.Size = UDim2.new(0, 218, 0, 0)
+        end
     end
 
     local function createOption(optionText, index)
