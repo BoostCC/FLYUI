@@ -1177,7 +1177,22 @@ function Section:CreateDropdown(config)
             if input.UserInputType == Enum.UserInputType.MouseButton1 then
                 dropdown.selected = optionText
                 updateOptionText()
-                updateOptionAppearance()
+                
+                -- Update ALL options appearance, not just this one
+                for _, child in pairs(Container:GetChildren()) do
+                    if child:IsA("Frame") and child.Name == "Frame" then
+                        local textLabel = child:FindFirstChild("TextLabel")
+                        if textLabel then
+                            local childOptionText = textLabel.Text
+                            if childOptionText == dropdown.selected then
+                                textLabel.TextColor3 = Color3.fromRGB(110, 117, 244)
+                            else
+                                textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                            end
+                        end
+                    end
+                end
+                
                 closeDropdown()
                 
                 if dropdown.callback then
