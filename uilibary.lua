@@ -390,16 +390,16 @@ function Tab:CreateSection(config)
     Section_Name.TextSize = 14
     Section_Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     Section_Name.Parent = SectionHeader
-    
-    local Holder = Instance.new("Frame")
-    Holder.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    Holder.AnchorPoint = Vector2.new(0.5, 0)
-    Holder.BackgroundTransparency = 1
-    Holder.Position = UDim2.new(0.5, 0, 1, 0)
-    Holder.Name = "Holder"
-    Holder.Size = UDim2.new(1, 1, 0.529411792755127, 1)
-    Holder.BorderSizePixel = 0
-    Holder.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+
+local Holder = Instance.new("Frame")
+Holder.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Holder.AnchorPoint = Vector2.new(0.5, 0)
+Holder.BackgroundTransparency = 1
+Holder.Position = UDim2.new(0.5, 0, 1, 0)
+Holder.Name = "Holder"
+Holder.Size = UDim2.new(1, 1, 0.529411792755127, 1)
+Holder.BorderSizePixel = 0
+Holder.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     Holder.Parent = SectionHeader
     
     local UIListLayout3 = Instance.new("UIListLayout")
@@ -442,50 +442,50 @@ function Section:CreateToggle(config)
     ToggleComponent.BorderSizePixel = 0
     ToggleComponent.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     ToggleComponent.Parent = self.holder
-    
-    local Toggle = Instance.new("Frame")
-    Toggle.AnchorPoint = Vector2.new(0, 0.5)
-    Toggle.Name = "Toggle"
-    Toggle.Position = UDim2.new(0, 12, 0.5, 0)
-    Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    Toggle.Size = UDim2.new(0, 20, 0, 20)
-    Toggle.BorderSizePixel = 0
+
+local Toggle = Instance.new("Frame")
+Toggle.AnchorPoint = Vector2.new(0, 0.5)
+Toggle.Name = "Toggle"
+Toggle.Position = UDim2.new(0, 12, 0.5, 0)
+Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Toggle.Size = UDim2.new(0, 20, 0, 20)
+Toggle.BorderSizePixel = 0
     Toggle.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
     Toggle.Parent = ToggleComponent
-    
-    local UICorner = Instance.new("UICorner")
-    UICorner.CornerRadius = UDim.new(0, 2)
-    UICorner.Parent = Toggle
-    
-    local Check = Instance.new("ImageLabel")
-    Check.ImageColor3 = Color3.fromRGB(21, 21, 23)
-    Check.ScaleType = Enum.ScaleType.Fit
-    Check.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    Check.Name = "Check"
-    Check.AnchorPoint = Vector2.new(0.5, 0.5)
-    Check.Image = "rbxassetid://80408732868542"
-    Check.BackgroundTransparency = 1
-    Check.Position = UDim2.new(0.5, 0, 0.5, 0)
-    Check.Size = UDim2.new(0, 12, 0, 10)
-    Check.BorderSizePixel = 0
-    Check.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    Check.Parent = Toggle
+
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 2)
+UICorner.Parent = Toggle
+
+local Check = Instance.new("ImageLabel")
+Check.ImageColor3 = Color3.fromRGB(21, 21, 23)
+Check.ScaleType = Enum.ScaleType.Fit
+Check.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Check.Name = "Check"
+Check.AnchorPoint = Vector2.new(0.5, 0.5)
+Check.Image = "rbxassetid://80408732868542"
+Check.BackgroundTransparency = 1
+Check.Position = UDim2.new(0.5, 0, 0.5, 0)
+Check.Size = UDim2.new(0, 12, 0, 10)
+Check.BorderSizePixel = 0
+Check.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Check.Parent = Toggle
     Check.Visible = false
-    
-    local Toggle_Name = Instance.new("TextLabel")
-    Toggle_Name.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+
+local Toggle_Name = Instance.new("TextLabel")
+Toggle_Name.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
     Toggle_Name.TextColor3 = Color3.fromRGB(103, 103, 104)
-    Toggle_Name.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Toggle_Name.BorderColor3 = Color3.fromRGB(0, 0, 0)
     Toggle_Name.Text = config.ToggleText
-    Toggle_Name.Name = "Toggle_Name"
-    Toggle_Name.AnchorPoint = Vector2.new(0, 0.5)
-    Toggle_Name.Size = UDim2.new(0, 1, 0, 1)
-    Toggle_Name.BackgroundTransparency = 1
-    Toggle_Name.Position = UDim2.new(0, 43, 0.5, 0)
-    Toggle_Name.BorderSizePixel = 0
-    Toggle_Name.AutomaticSize = Enum.AutomaticSize.XY
-    Toggle_Name.TextSize = 14
-    Toggle_Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Toggle_Name.Name = "Toggle_Name"
+Toggle_Name.AnchorPoint = Vector2.new(0, 0.5)
+Toggle_Name.Size = UDim2.new(0, 1, 0, 1)
+Toggle_Name.BackgroundTransparency = 1
+Toggle_Name.Position = UDim2.new(0, 43, 0.5, 0)
+Toggle_Name.BorderSizePixel = 0
+Toggle_Name.AutomaticSize = Enum.AutomaticSize.XY
+Toggle_Name.TextSize = 14
+Toggle_Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     Toggle_Name.Parent = ToggleComponent
     
     ToggleComponent.InputBegan:Connect(function(input)
@@ -497,7 +497,7 @@ function Section:CreateToggle(config)
                 Toggle_Name.TextColor3 = Color3.fromRGB(255, 255, 255)
                 Check.Visible = true
             else
-                Toggle.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+Toggle.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
                 Toggle_Name.TextColor3 = Color3.fromRGB(103, 103, 104)
                 Check.Visible = false
             end
@@ -553,48 +553,48 @@ function Section:CreateSlider(config)
     Slider_Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     Slider_Name.Parent = SliderComponent
 
-    local Progress_BG = Instance.new("Frame")
-    Progress_BG.AnchorPoint = Vector2.new(0, 1)
-    Progress_BG.Name = "Progress_BG"
-    Progress_BG.Position = UDim2.new(0, 12, 1, 0)
-    Progress_BG.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    Progress_BG.Size = UDim2.new(0, 222, 0, 15)
-    Progress_BG.BorderSizePixel = 0
-    Progress_BG.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+local Progress_BG = Instance.new("Frame")
+Progress_BG.AnchorPoint = Vector2.new(0, 1)
+Progress_BG.Name = "Progress_BG"
+Progress_BG.Position = UDim2.new(0, 12, 1, 0)
+Progress_BG.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Progress_BG.Size = UDim2.new(0, 222, 0, 15)
+Progress_BG.BorderSizePixel = 0
+Progress_BG.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
     Progress_BG.Parent = SliderComponent
 
-    local UICorner = Instance.new("UICorner")
-    UICorner.CornerRadius = UDim.new(0, 2)
-    UICorner.Parent = Progress_BG
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 2)
+UICorner.Parent = Progress_BG
 
-    local Progress_Bar = Instance.new("Frame")
-    Progress_Bar.AnchorPoint = Vector2.new(0, 0.5)
-    Progress_Bar.Name = "Progress_Bar"
-    Progress_Bar.Position = UDim2.new(0, 0, 0.5, 0)
-    Progress_Bar.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    Progress_Bar.Size = UDim2.new(0, 190, 0, 15)
-    Progress_Bar.BorderSizePixel = 0
-    Progress_Bar.BackgroundColor3 = Color3.fromRGB(110, 117, 244)
-    Progress_Bar.Parent = Progress_BG
+local Progress_Bar = Instance.new("Frame")
+Progress_Bar.AnchorPoint = Vector2.new(0, 0.5)
+Progress_Bar.Name = "Progress_Bar"
+Progress_Bar.Position = UDim2.new(0, 0, 0.5, 0)
+Progress_Bar.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Progress_Bar.Size = UDim2.new(0, 190, 0, 15)
+Progress_Bar.BorderSizePixel = 0
+Progress_Bar.BackgroundColor3 = Color3.fromRGB(110, 117, 244)
+Progress_Bar.Parent = Progress_BG
 
     local UICorner2 = Instance.new("UICorner")
     UICorner2.CornerRadius = UDim.new(0, 2)
     UICorner2.Parent = Progress_Bar
 
-    local Slider_Value = Instance.new("TextLabel")
-    Slider_Value.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
-    Slider_Value.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Slider_Value.BorderColor3 = Color3.fromRGB(0, 0, 0)
+local Slider_Value = Instance.new("TextLabel")
+Slider_Value.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+Slider_Value.TextColor3 = Color3.fromRGB(255, 255, 255)
+Slider_Value.BorderColor3 = Color3.fromRGB(0, 0, 0)
     Slider_Value.Text = tostring(slider.value)
-    Slider_Value.Name = "Slider_Value"
-    Slider_Value.AnchorPoint = Vector2.new(1, 0)
-    Slider_Value.Size = UDim2.new(0, 1, 0, 1)
-    Slider_Value.BackgroundTransparency = 1
-    Slider_Value.Position = UDim2.new(1, -13, 0, 0)
-    Slider_Value.BorderSizePixel = 0
-    Slider_Value.AutomaticSize = Enum.AutomaticSize.XY
-    Slider_Value.TextSize = 14
-    Slider_Value.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Slider_Value.Name = "Slider_Value"
+Slider_Value.AnchorPoint = Vector2.new(1, 0)
+Slider_Value.Size = UDim2.new(0, 1, 0, 1)
+Slider_Value.BackgroundTransparency = 1
+Slider_Value.Position = UDim2.new(1, -13, 0, 0)
+Slider_Value.BorderSizePixel = 0
+Slider_Value.AutomaticSize = Enum.AutomaticSize.XY
+Slider_Value.TextSize = 14
+Slider_Value.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     Slider_Value.Parent = SliderComponent
 
     local function updateSlider(value)
@@ -674,74 +674,74 @@ function Section:CreateMultidropdown(config)
     multidropdown.selected = {}
     multidropdown.open = false
 
-    local MultiDropdown_Component = Instance.new("Frame")
-    MultiDropdown_Component.Name = "MultiDropdown_Component"
-    MultiDropdown_Component.BackgroundTransparency = 1
-    MultiDropdown_Component.Position = UDim2.new(0, 0, 1, 0)
-    MultiDropdown_Component.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    MultiDropdown_Component.Size = UDim2.new(0, 243, 0, 52)
-    MultiDropdown_Component.BorderSizePixel = 0
-    MultiDropdown_Component.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+local MultiDropdown_Component = Instance.new("Frame")
+MultiDropdown_Component.Name = "MultiDropdown_Component"
+MultiDropdown_Component.BackgroundTransparency = 1
+MultiDropdown_Component.Position = UDim2.new(0, 0, 1, 0)
+MultiDropdown_Component.BorderColor3 = Color3.fromRGB(0, 0, 0)
+MultiDropdown_Component.Size = UDim2.new(0, 243, 0, 52)
+MultiDropdown_Component.BorderSizePixel = 0
+MultiDropdown_Component.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     MultiDropdown_Component.Parent = self.holder
 
     local Dropdown = Instance.new("TextButton")
-    Dropdown.AnchorPoint = Vector2.new(0, 1)
-    Dropdown.Name = "Dropdown"
-    Dropdown.Position = UDim2.new(0, 12, 1, 0)
-    Dropdown.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    Dropdown.Size = UDim2.new(0, 222, 0, 30)
-    Dropdown.BorderSizePixel = 0
-    Dropdown.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+Dropdown.AnchorPoint = Vector2.new(0, 1)
+Dropdown.Name = "Dropdown"
+Dropdown.Position = UDim2.new(0, 12, 1, 0)
+Dropdown.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Dropdown.Size = UDim2.new(0, 222, 0, 30)
+Dropdown.BorderSizePixel = 0
+Dropdown.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
     Dropdown.Text = ""
     Dropdown.TextTransparency = 1
-    Dropdown.Parent = MultiDropdown_Component
+Dropdown.Parent = MultiDropdown_Component
 
-    local UICorner = Instance.new("UICorner")
-    UICorner.CornerRadius = UDim.new(0, 2)
-    UICorner.Parent = Dropdown
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 2)
+UICorner.Parent = Dropdown
 
-    local Option = Instance.new("TextLabel")
-    Option.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
-    Option.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Option.BorderColor3 = Color3.fromRGB(0, 0, 0)
+local Option = Instance.new("TextLabel")
+Option.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+Option.TextColor3 = Color3.fromRGB(255, 255, 255)
+Option.BorderColor3 = Color3.fromRGB(0, 0, 0)
     Option.Text = "None"
-    Option.Name = "Option"
-    Option.AnchorPoint = Vector2.new(0, 0.5)
-    Option.Size = UDim2.new(0, 1, 0, 1)
-    Option.BackgroundTransparency = 1
-    Option.Position = UDim2.new(0, 11, 0.5, 0)
-    Option.BorderSizePixel = 0
-    Option.AutomaticSize = Enum.AutomaticSize.XY
-    Option.TextSize = 14
-    Option.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    Option.Parent = Dropdown
+Option.Name = "Option"
+Option.AnchorPoint = Vector2.new(0, 0.5)
+Option.Size = UDim2.new(0, 1, 0, 1)
+Option.BackgroundTransparency = 1
+Option.Position = UDim2.new(0, 11, 0.5, 0)
+Option.BorderSizePixel = 0
+Option.AutomaticSize = Enum.AutomaticSize.XY
+Option.TextSize = 14
+Option.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Option.Parent = Dropdown
 
-    local Icon = Instance.new("ImageLabel")
-    Icon.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    Icon.Name = "Icon"
-    Icon.AnchorPoint = Vector2.new(1, 0.5)
-    Icon.Image = "rbxassetid://135052919879796"
-    Icon.BackgroundTransparency = 1
-    Icon.Position = UDim2.new(1, -10, 0.5, 0)
-    Icon.Size = UDim2.new(0, 14, 0, 16)
-    Icon.BorderSizePixel = 0
-    Icon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    Icon.Parent = Dropdown
+local Icon = Instance.new("ImageLabel")
+Icon.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Icon.Name = "Icon"
+Icon.AnchorPoint = Vector2.new(1, 0.5)
+Icon.Image = "rbxassetid://135052919879796"
+Icon.BackgroundTransparency = 1
+Icon.Position = UDim2.new(1, -10, 0.5, 0)
+Icon.Size = UDim2.new(0, 14, 0, 16)
+Icon.BorderSizePixel = 0
+Icon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Icon.Parent = Dropdown
 
-    local Dropdown_Name = Instance.new("TextLabel")
-    Dropdown_Name.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
-    Dropdown_Name.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Dropdown_Name.BorderColor3 = Color3.fromRGB(0, 0, 0)
+local Dropdown_Name = Instance.new("TextLabel")
+Dropdown_Name.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+Dropdown_Name.TextColor3 = Color3.fromRGB(255, 255, 255)
+Dropdown_Name.BorderColor3 = Color3.fromRGB(0, 0, 0)
     Dropdown_Name.Text = multidropdown.text
-    Dropdown_Name.Name = "Dropdown_Name"
-    Dropdown_Name.Size = UDim2.new(0, 1, 0, 1)
-    Dropdown_Name.BackgroundTransparency = 1
-    Dropdown_Name.Position = UDim2.new(0, 12, 0, 0)
-    Dropdown_Name.BorderSizePixel = 0
-    Dropdown_Name.AutomaticSize = Enum.AutomaticSize.XY
-    Dropdown_Name.TextSize = 14
-    Dropdown_Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    Dropdown_Name.Parent = MultiDropdown_Component
+Dropdown_Name.Name = "Dropdown_Name"
+Dropdown_Name.Size = UDim2.new(0, 1, 0, 1)
+Dropdown_Name.BackgroundTransparency = 1
+Dropdown_Name.Position = UDim2.new(0, 12, 0, 0)
+Dropdown_Name.BorderSizePixel = 0
+Dropdown_Name.AutomaticSize = Enum.AutomaticSize.XY
+Dropdown_Name.TextSize = 14
+Dropdown_Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Dropdown_Name.Parent = MultiDropdown_Component
 
     local Container = Instance.new("Frame")
     Container.BorderColor3 = Color3.fromRGB(0, 0, 0)
@@ -755,25 +755,25 @@ function Section:CreateMultidropdown(config)
     Container.Parent = ScreenGui
     Container.Visible = false
 
-    local UIListLayout = Instance.new("UIListLayout")
-    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
     UIListLayout.Padding = UDim.new(0, 0)
-    UIListLayout.Parent = Container
+UIListLayout.Parent = Container
 
-    local UIPadding = Instance.new("UIPadding")
-    UIPadding.PaddingBottom = UDim.new(0, 5)
-    UIPadding.PaddingTop = UDim.new(0, 5)
-    UIPadding.PaddingLeft = UDim.new(0, 3)
-    UIPadding.PaddingRight = UDim.new(0, 3)
-    UIPadding.Parent = Container
+local UIPadding = Instance.new("UIPadding")
+    UIPadding.PaddingBottom = UDim.new(0, 2)
+    UIPadding.PaddingTop = UDim.new(0, 2)
+    UIPadding.PaddingLeft = UDim.new(0, 0)
+    UIPadding.PaddingRight = UDim.new(0, 0)
+UIPadding.Parent = Container
 
     local UICorner2 = Instance.new("UICorner")
     UICorner2.CornerRadius = UDim.new(0, 2)
     UICorner2.Parent = Container
 
-    local UIStroke = Instance.new("UIStroke")
+local UIStroke = Instance.new("UIStroke")
     UIStroke.Color = Color3.fromRGB(30, 30, 34)
-    UIStroke.Parent = Container
+UIStroke.Parent = Container
 
     local function updateOptionText()
         if #multidropdown.selected == 0 then
@@ -790,9 +790,9 @@ function Section:CreateMultidropdown(config)
         print("New state:", multidropdown.open, "Container visible:", Container.Visible)
         
         if multidropdown.open then
-            Container.Size = UDim2.new(0, 218, 0, #multidropdown.options * 18 + 10)
+            Container.Size = UDim2.new(0, 222, 0, #multidropdown.options * 18 + 4)
             
-            -- Use absolute screen coordinates
+            -- Use absolute screen coordinates with perfect alignment
             local dropdownAbsolutePos = Dropdown.AbsolutePosition
             local dropdownSize = Dropdown.AbsoluteSize
             local containerX = dropdownAbsolutePos.X
@@ -806,29 +806,29 @@ function Section:CreateMultidropdown(config)
     end
 
     local function createOption(optionText, index)
-        local Frame = Instance.new("Frame")
+local Frame = Instance.new("Frame")
         Frame.AnchorPoint = Vector2.new(0, 0)
         Frame.Position = UDim2.new(0, 0, 0, 0)
-        Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
         Frame.Size = UDim2.new(1, 0, 0, 18)
-        Frame.BorderSizePixel = 0
-        Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
-        Frame.Parent = Container
+Frame.BorderSizePixel = 0
+Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+Frame.Parent = Container
 
-        local TextLabel = Instance.new("TextLabel")
-        TextLabel.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
-        TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-        TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+local TextLabel = Instance.new("TextLabel")
+TextLabel.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
         TextLabel.Text = optionText
-        TextLabel.AnchorPoint = Vector2.new(0, 0.5)
-        TextLabel.Size = UDim2.new(0, 1, 0, 1)
-        TextLabel.BackgroundTransparency = 1
-        TextLabel.Position = UDim2.new(0, 8, 0.5, 0)
-        TextLabel.BorderSizePixel = 0
-        TextLabel.AutomaticSize = Enum.AutomaticSize.XY
-        TextLabel.TextSize = 16
-        TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        TextLabel.Parent = Frame
+TextLabel.AnchorPoint = Vector2.new(0, 0.5)
+TextLabel.Size = UDim2.new(0, 1, 0, 1)
+TextLabel.BackgroundTransparency = 1
+        TextLabel.Position = UDim2.new(0, 6, 0.5, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.AutomaticSize = Enum.AutomaticSize.XY
+        TextLabel.TextSize = 14
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.Parent = Frame
 
         local function isSelected()
             for _, selected in pairs(multidropdown.selected) do
