@@ -1465,4 +1465,215 @@ function Section:CreateButton(config)
     return button
 end
 
+function Section:CreateKeybind(config)
+    local keybind = {}
+    keybind.config = config or {}
+    keybind.text = keybind.config.KeybindText or "Keybind"
+    keybind.callback = keybind.config.Callback
+    keybind.value = keybind.config.Value or "None"
+    keybind.listening = false
+
+    local Keybind_Component = Instance.new("Frame")
+    Keybind_Component.BackgroundTransparency = 1
+    Keybind_Component.Name = "Keybind_Component"
+    Keybind_Component.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Keybind_Component.Size = UDim2.new(0, 243, 0, 35)
+    Keybind_Component.BorderSizePixel = 0
+    Keybind_Component.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Keybind_Component.Parent = self.holder
+
+    local Keybind_Name = Instance.new("TextLabel")
+    Keybind_Name.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+    Keybind_Name.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Keybind_Name.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Keybind_Name.Text = keybind.text
+    Keybind_Name.Name = "Keybind_Name"
+    Keybind_Name.AnchorPoint = Vector2.new(0, 0.5)
+    Keybind_Name.Size = UDim2.new(0, 1, 0, 1)
+    Keybind_Name.BackgroundTransparency = 1
+    Keybind_Name.Position = UDim2.new(0, 12, 0.5, 0)
+    Keybind_Name.BorderSizePixel = 0
+    Keybind_Name.AutomaticSize = Enum.AutomaticSize.XY
+    Keybind_Name.TextSize = 14
+    Keybind_Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Keybind_Name.Parent = Keybind_Component
+
+    local Keybind = Instance.new("TextButton")
+    Keybind.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+    Keybind.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Keybind.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Keybind.Text = keybind.value
+    Keybind.Size = UDim2.new(0, 1, 0, 1)
+    Keybind.AnchorPoint = Vector2.new(1, 0.5)
+    Keybind.AutomaticSize = Enum.AutomaticSize.XY
+    Keybind.Name = "Keybind"
+    Keybind.Position = UDim2.new(1, -12, 0.5, 0)
+    Keybind.BorderSizePixel = 0
+    Keybind.ZIndex = 50
+    Keybind.TextSize = 14
+    Keybind.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+    Keybind.AutoButtonColor = false
+    Keybind.Active = true
+    Keybind.SelectionImageObject = nil
+    Keybind.Parent = Keybind_Component
+
+    local UIPadding = Instance.new("UIPadding")
+    UIPadding.PaddingTop = UDim.new(0, 6)
+    UIPadding.PaddingBottom = UDim.new(0, 6)
+    UIPadding.PaddingRight = UDim.new(0, 6)
+    UIPadding.PaddingLeft = UDim.new(0, 6)
+    UIPadding.Parent = Keybind
+
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(0, 4)
+    UICorner.Parent = Keybind
+
+    -- Key mapping for simple key names
+    local keyMap = {
+        [Enum.KeyCode.LeftShift] = "SHIFT",
+        [Enum.KeyCode.RightShift] = "SHIFT",
+        [Enum.KeyCode.LeftControl] = "CTRL",
+        [Enum.KeyCode.RightControl] = "CTRL",
+        [Enum.KeyCode.LeftAlt] = "ALT",
+        [Enum.KeyCode.RightAlt] = "ALT",
+        [Enum.KeyCode.Insert] = "INSERT",
+        [Enum.KeyCode.Delete] = "DELETE",
+        [Enum.KeyCode.Home] = "HOME",
+        [Enum.KeyCode.End] = "END",
+        [Enum.KeyCode.PageUp] = "PAGEUP",
+        [Enum.KeyCode.PageDown] = "PAGEDOWN",
+        [Enum.KeyCode.Up] = "UP",
+        [Enum.KeyCode.Down] = "DOWN",
+        [Enum.KeyCode.Left] = "LEFT",
+        [Enum.KeyCode.Right] = "RIGHT",
+        [Enum.KeyCode.Tab] = "TAB",
+        [Enum.KeyCode.CapsLock] = "CAPS",
+        [Enum.KeyCode.LeftMeta] = "META",
+        [Enum.KeyCode.RightMeta] = "META",
+        [Enum.KeyCode.LeftWindows] = "WIN",
+        [Enum.KeyCode.RightWindows] = "WIN",
+        [Enum.KeyCode.Return] = "ENTER",
+        [Enum.KeyCode.Backspace] = "BACKSPACE",
+        [Enum.KeyCode.Escape] = "ESC",
+        [Enum.KeyCode.F1] = "F1",
+        [Enum.KeyCode.F2] = "F2",
+        [Enum.KeyCode.F3] = "F3",
+        [Enum.KeyCode.F4] = "F4",
+        [Enum.KeyCode.F5] = "F5",
+        [Enum.KeyCode.F6] = "F6",
+        [Enum.KeyCode.F7] = "F7",
+        [Enum.KeyCode.F8] = "F8",
+        [Enum.KeyCode.F9] = "F9",
+        [Enum.KeyCode.F10] = "F10",
+        [Enum.KeyCode.F11] = "F11",
+        [Enum.KeyCode.F12] = "F12",
+        [Enum.KeyCode.Zero] = "0",
+        [Enum.KeyCode.One] = "1",
+        [Enum.KeyCode.Two] = "2",
+        [Enum.KeyCode.Three] = "3",
+        [Enum.KeyCode.Four] = "4",
+        [Enum.KeyCode.Five] = "5",
+        [Enum.KeyCode.Six] = "6",
+        [Enum.KeyCode.Seven] = "7",
+        [Enum.KeyCode.Eight] = "8",
+        [Enum.KeyCode.Nine] = "9",
+        [Enum.KeyCode.Semicolon] = ";",
+        [Enum.KeyCode.Equals] = "=",
+        [Enum.KeyCode.Minus] = "-",
+        [Enum.KeyCode.LeftBracket] = "[",
+        [Enum.KeyCode.RightBracket] = "]",
+        [Enum.KeyCode.Backslash] = "\\",
+        [Enum.KeyCode.Quote] = "'",
+        [Enum.KeyCode.Grave] = "`",
+        [Enum.KeyCode.Comma] = ",",
+        [Enum.KeyCode.Period] = ".",
+        [Enum.KeyCode.Slash] = "/",
+        [Enum.KeyCode.NumPadZero] = "NUM0",
+        [Enum.KeyCode.NumPadOne] = "NUM1",
+        [Enum.KeyCode.NumPadTwo] = "NUM2",
+        [Enum.KeyCode.NumPadThree] = "NUM3",
+        [Enum.KeyCode.NumPadFour] = "NUM4",
+        [Enum.KeyCode.NumPadFive] = "NUM5",
+        [Enum.KeyCode.NumPadSix] = "NUM6",
+        [Enum.KeyCode.NumPadSeven] = "NUM7",
+        [Enum.KeyCode.NumPadEight] = "NUM8",
+        [Enum.KeyCode.NumPadNine] = "NUM9",
+        [Enum.KeyCode.NumLock] = "NUMLOCK",
+        [Enum.KeyCode.NumPadMinus] = "NUMMINUS",
+        [Enum.KeyCode.NumPadPlus] = "NUMPLUS",
+        [Enum.KeyCode.NumPadMultiply] = "NUMMULTIPLY",
+        [Enum.KeyCode.NumPadDivide] = "NUMDIVIDE",
+        [Enum.KeyCode.NumPadPeriod] = "NUMPERIOD",
+        [Enum.KeyCode.NumPadEnter] = "NUMENTER"
+    }
+
+    -- Add letter keys (E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z)
+    for i = 0, 25 do
+        local keyCode = Enum.KeyCode["A"] + i
+        local letter = string.char(65 + i) -- A = 65 in ASCII
+        keyMap[keyCode] = letter
+    end
+
+    local function getKeyName(keyCode)
+        return keyMap[keyCode] or tostring(keyCode):gsub("Enum.KeyCode.", "")
+    end
+
+    local function startListening()
+        keybind.listening = true
+        Keybind.Text = "..."
+        Keybind.BackgroundColor3 = Color3.fromRGB(110, 117, 244)
+    end
+
+    local function stopListening()
+        keybind.listening = false
+        Keybind.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+    end
+
+    Keybind.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            if not keybind.listening then
+                startListening()
+            else
+                stopListening()
+                Keybind.Text = keybind.value
+            end
+        end
+    end)
+
+    UserInputService.InputBegan:Connect(function(input, gameProcessed)
+        if keybind.listening and not gameProcessed then
+            if input.UserInputType == Enum.UserInputType.Keyboard then
+                local keyName = getKeyName(input.KeyCode)
+                keybind.value = keyName
+                Keybind.Text = keyName
+                stopListening()
+                
+                if keybind.callback then
+                    keybind.callback(keybind.value)
+                end
+            elseif input.UserInputType == Enum.UserInputType.MouseButton1 then
+                -- Clicked outside, stop listening
+                stopListening()
+                Keybind.Text = keybind.value
+            end
+        end
+    end)
+
+    keybind.component = Keybind_Component
+    keybind.keybindButton = Keybind
+    keybind.nameLabel = Keybind_Name
+    
+    function keybind:Set(value)
+        keybind.value = value or "None"
+        Keybind.Text = keybind.value
+    end
+    
+    function keybind:Get()
+        return keybind.value
+    end
+
+    table.insert(self.components, keybind)
+    return keybind
+end
+
 return libary
