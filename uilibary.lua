@@ -1648,7 +1648,7 @@ function Section:CreateKeybind(config)
                     keybind.callback(keybind.value)
                 end
             elseif input.UserInputType == Enum.UserInputType.MouseButton1 then
-                
+                -- Clicked outside, stop listening
                 stopListening()
                 Keybind.Text = keybind.value
             end
