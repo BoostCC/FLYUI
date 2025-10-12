@@ -865,6 +865,9 @@ TextLabel.Parent = Frame
 
         Frame.InputBegan:Connect(function(input)
             if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                -- Prevent the click from propagating to the outside click detector
+                input:GetPropertyChangedSignal("UserInputState"):Wait()
+                
                 if isSelected() then
                     for i, selected in pairs(multidropdown.selected) do
                         if selected == optionText then
@@ -913,22 +916,29 @@ TextLabel.Parent = Frame
    
     UserInputService.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 and multidropdown.open then
-            local mousePos = UserInputService:GetMouseLocation()
-            local containerPos = Container.AbsolutePosition
-            local containerSize = Container.AbsoluteSize
-            local dropdownPos = Dropdown.AbsolutePosition
-            local dropdownSize = Dropdown.AbsoluteSize
-            
-            -- Check if click is outside both the dropdown button and the container
-            local outsideContainer = mousePos.X < containerPos.X or mousePos.X > containerPos.X + containerSize.X or
-                                   mousePos.Y < containerPos.Y or mousePos.Y > containerPos.Y + containerSize.Y
-            
-            local outsideDropdown = mousePos.X < dropdownPos.X or mousePos.X > dropdownPos.X + dropdownSize.X or
-                                   mousePos.Y < dropdownPos.Y or mousePos.Y > dropdownPos.Y + dropdownSize.Y
-            
-            if outsideContainer and outsideDropdown then
-                closeDropdown()
-            end
+            -- Use spawn to let option clicks process first
+            spawn(function()
+                wait(0.01)
+                
+                if not multidropdown.open then return end -- Check if dropdown was closed by option click
+                
+                local mousePos = UserInputService:GetMouseLocation()
+                local containerPos = Container.AbsolutePosition
+                local containerSize = Container.AbsoluteSize
+                local dropdownPos = Dropdown.AbsolutePosition
+                local dropdownSize = Dropdown.AbsoluteSize
+                
+                -- Check if click is outside both the dropdown button and the container
+                local outsideContainer = mousePos.X < containerPos.X or mousePos.X > containerPos.X + containerSize.X or
+                                       mousePos.Y < containerPos.Y or mousePos.Y > containerPos.Y + containerSize.Y
+                
+                local outsideDropdown = mousePos.X < dropdownPos.X or mousePos.X > dropdownPos.X + dropdownSize.X or
+                                       mousePos.Y < dropdownPos.Y or mousePos.Y > dropdownPos.Y + dropdownSize.Y
+                
+                if outsideContainer and outsideDropdown then
+                    closeDropdown()
+                end
+            end)
         end
     end)
 
