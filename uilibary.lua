@@ -1114,7 +1114,21 @@ function Section:CreateDropdown(config)
         if dropdown.open then
             Container.Size = UDim2.new(0, 222, 0, #dropdown.options * 18 + 4)
             
-           
+            -- Reset all options appearance when opening
+            for _, child in pairs(Container:GetChildren()) do
+                if child:IsA("Frame") and child.Name == "Frame" then
+                    local textLabel = child:FindFirstChild("TextLabel")
+                    if textLabel then
+                        local childOptionText = textLabel.Text
+                        if childOptionText == dropdown.selected then
+                            textLabel.TextColor3 = Color3.fromRGB(110, 117, 244)
+                        else
+                            textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                        end
+                    end
+                end
+            end
+            
             local dropdownAbsolutePos = Dropdown.AbsolutePosition
             local dropdownSize = Dropdown.AbsoluteSize
             local containerX = dropdownAbsolutePos.X
