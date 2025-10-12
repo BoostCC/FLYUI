@@ -757,6 +757,7 @@ function Section:CreateMultidropdown(config)
 
     local UIListLayout = Instance.new("UIListLayout")
     UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIListLayout.Padding = UDim.new(0, 0)
     UIListLayout.Parent = Container
 
     local UIPadding = Instance.new("UIPadding")
@@ -789,7 +790,7 @@ function Section:CreateMultidropdown(config)
         print("New state:", multidropdown.open, "Container visible:", Container.Visible)
         
         if multidropdown.open then
-            Container.Size = UDim2.new(0, 218, 0, #multidropdown.options * 20 + 10)
+            Container.Size = UDim2.new(0, 218, 0, #multidropdown.options * 18 + 10)
             
             -- Use absolute screen coordinates
             local dropdownAbsolutePos = Dropdown.AbsolutePosition
@@ -809,7 +810,7 @@ function Section:CreateMultidropdown(config)
         Frame.AnchorPoint = Vector2.new(0, 0)
         Frame.Position = UDim2.new(0, 0, 0, 0)
         Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-        Frame.Size = UDim2.new(1, 0, 0, 20)
+        Frame.Size = UDim2.new(1, 0, 0, 18)
         Frame.BorderSizePixel = 0
         Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
         Frame.Parent = Container
