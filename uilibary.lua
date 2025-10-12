@@ -1315,10 +1315,54 @@ function Section:CreateTextInput(config)
     TextInput_Component.BackgroundTransparency = 1
     TextInput_Component.Position = UDim2.new(0, 0, 1, 0)
     TextInput_Component.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    TextInput_Component.Size = UDim2.new(0, 243, 0, 52)
+    TextInput_Component.Size = UDim2.new(0, 243, 0, 53)
     TextInput_Component.BorderSizePixel = 0
     TextInput_Component.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     TextInput_Component.Parent = self.holder
+
+    local Textbox = Instance.new("Frame")
+    Textbox.AnchorPoint = Vector2.new(0, 1)
+    Textbox.Name = "Textbox"
+    Textbox.Position = UDim2.new(0, 12, 1, 0)
+    Textbox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Textbox.Size = UDim2.new(0, 222, 0, 30)
+    Textbox.BorderSizePixel = 0
+    Textbox.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+    Textbox.Parent = TextInput_Component
+
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(0, 2)
+    UICorner.Parent = Textbox
+
+    local Icon = Instance.new("ImageLabel")
+    Icon.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Icon.Name = "Icon"
+    Icon.AnchorPoint = Vector2.new(1, 0.5)
+    Icon.Image = "rbxassetid://74579954889308"
+    Icon.BackgroundTransparency = 1
+    Icon.Position = UDim2.new(1, -10, 0.5, 0)
+    Icon.Size = UDim2.new(0, 14, 0, 14)
+    Icon.BorderSizePixel = 0
+    Icon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Icon.Parent = Textbox
+
+    local Textinput = Instance.new("TextBox")
+    Textinput.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+    Textinput.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Textinput.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Textinput.Text = textinput.value
+    Textinput.PlaceholderText = textinput.placeholder
+    Textinput.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
+    Textinput.Name = "Textinput"
+    Textinput.AnchorPoint = Vector2.new(0, 0.5)
+    Textinput.Size = UDim2.new(0, 1, 0, 1)
+    Textinput.BackgroundTransparency = 1
+    Textinput.Position = UDim2.new(0, 11, 0.5, 0)
+    Textinput.BorderSizePixel = 0
+    Textinput.AutomaticSize = Enum.AutomaticSize.XY
+    Textinput.TextSize = 14
+    Textinput.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Textinput.Parent = Textbox
 
     local TextInput_Name = Instance.new("TextLabel")
     TextInput_Name.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
@@ -1335,47 +1379,22 @@ function Section:CreateTextInput(config)
     TextInput_Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     TextInput_Name.Parent = TextInput_Component
 
-    local TextInput_Box = Instance.new("TextBox")
-    TextInput_Box.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
-    TextInput_Box.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TextInput_Box.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    TextInput_Box.Text = textinput.value
-    TextInput_Box.PlaceholderText = textinput.placeholder
-    TextInput_Box.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
-    TextInput_Box.Name = "TextInput_Box"
-    TextInput_Box.Size = UDim2.new(0, 222, 0, 30)
-    TextInput_Box.BackgroundTransparency = 0
-    TextInput_Box.Position = UDim2.new(0, 12, 1, 0)
-    TextInput_Box.BorderSizePixel = 0
-    TextInput_Box.TextSize = 14
-    TextInput_Box.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
-    TextInput_Box.TextXAlignment = Enum.TextXAlignment.Left
-    TextInput_Box.TextYAlignment = Enum.TextYAlignment.Center
-    TextInput_Box.Parent = TextInput_Component
-
-    local UICorner = Instance.new("UICorner")
-    UICorner.CornerRadius = UDim.new(0, 2)
-    UICorner.Parent = TextInput_Box
-
-    local UIPadding = Instance.new("UIPadding")
-    UIPadding.PaddingLeft = UDim.new(0, 8)
-    UIPadding.PaddingRight = UDim.new(0, 8)
-    UIPadding.Parent = TextInput_Box
-
-    TextInput_Box.FocusLost:Connect(function(enterPressed)
-        textinput.value = TextInput_Box.Text
+    Textinput.FocusLost:Connect(function(enterPressed)
+        textinput.value = Textinput.Text
         if textinput.callback then
             textinput.callback(textinput.value, enterPressed)
         end
     end)
 
     textinput.component = TextInput_Component
-    textinput.textBox = TextInput_Box
+    textinput.textBox = Textinput
     textinput.nameLabel = TextInput_Name
+    textinput.textboxFrame = Textbox
+    textinput.icon = Icon
     
     function textinput:Set(value)
         textinput.value = value or ""
-        TextInput_Box.Text = textinput.value
+        Textinput.Text = textinput.value
     end
     
     function textinput:Get()
@@ -1397,55 +1416,33 @@ function Section:CreateButton(config)
     Button_Component.BackgroundTransparency = 1
     Button_Component.Position = UDim2.new(0, 0, 1, 0)
     Button_Component.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    Button_Component.Size = UDim2.new(0, 243, 0, 35)
+    Button_Component.Size = UDim2.new(0, 243, 0, 46)
     Button_Component.BorderSizePixel = 0
     Button_Component.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     Button_Component.Parent = self.holder
 
-    local Button = Instance.new("TextButton")
-    Button.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
-    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    Button.Text = button.text
-    Button.Name = "Button"
-    Button.Size = UDim2.new(0, 222, 0, 30)
-    Button.BackgroundTransparency = 0
-    Button.Position = UDim2.new(0, 12, 1, 0)
-    Button.BorderSizePixel = 0
-    Button.TextSize = 14
-    Button.BackgroundColor3 = Color3.fromRGB(110, 117, 244)
-    Button.AutoButtonColor = false
-    Button.Active = true
-    Button.SelectionImageObject = nil
-    Button.Parent = Button_Component
+    local TextButton = Instance.new("TextButton")
+    TextButton.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
+    TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    TextButton.Text = button.text
+    TextButton.AnchorPoint = Vector2.new(0, 0.5)
+    TextButton.Position = UDim2.new(0, 12, 0.5, 0)
+    TextButton.Size = UDim2.new(0, 222, 0, 35)
+    TextButton.BorderSizePixel = 0
+    TextButton.TextSize = 14
+    TextButton.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+    TextButton.AutoButtonColor = false
+    TextButton.Active = true
+    TextButton.SelectionImageObject = nil
+    TextButton.Parent = Button_Component
 
     local UICorner = Instance.new("UICorner")
     UICorner.CornerRadius = UDim.new(0, 2)
-    UICorner.Parent = Button
+    UICorner.Parent = TextButton
 
-    local UIPadding = Instance.new("UIPadding")
-    UIPadding.PaddingLeft = UDim.new(0, 8)
-    UIPadding.PaddingRight = UDim.new(0, 8)
-    UIPadding.Parent = Button
-
-    -- Hover effect
-    local originalColor = Button.BackgroundColor3
-    local hoverColor = Color3.fromRGB(130, 137, 254)
-
-    Button.MouseEnter:Connect(function()
-        Button.BackgroundColor3 = hoverColor
-    end)
-
-    Button.MouseLeave:Connect(function()
-        Button.BackgroundColor3 = originalColor
-    end)
-
-    Button.InputBegan:Connect(function(input)
+    TextButton.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            Button.BackgroundColor3 = Color3.fromRGB(90, 97, 224)
-            wait(0.1)
-            Button.BackgroundColor3 = originalColor
-            
             if button.callback then
                 button.callback()
             end
@@ -1453,11 +1450,11 @@ function Section:CreateButton(config)
     end)
 
     button.component = Button_Component
-    button.button = Button
+    button.button = TextButton
     
     function button:SetText(newText)
         button.text = newText
-        Button.Text = button.text
+        TextButton.Text = button.text
     end
     
     function button:GetText()
