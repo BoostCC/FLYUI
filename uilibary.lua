@@ -825,14 +825,19 @@ UIStroke.Parent = Container
     end
 
     local function createOption(optionText, index)
-local Frame = Instance.new("Frame")
+        local Frame = Instance.new("TextButton")
         Frame.AnchorPoint = Vector2.new(0, 0)
         Frame.Position = UDim2.new(0, 0, 0, 0)
-Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+        Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
         Frame.Size = UDim2.new(1, 0, 0, 18)
-Frame.BorderSizePixel = 0
-Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
-Frame.Parent = Container
+        Frame.BorderSizePixel = 0
+        Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+        Frame.Text = ""
+        Frame.TextTransparency = 1
+        Frame.AutoButtonColor = false
+        Frame.Active = true
+        Frame.SelectionImageObject = nil
+        Frame.Parent = Container
 
 local TextLabel = Instance.new("TextLabel")
 TextLabel.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
@@ -870,8 +875,8 @@ TextLabel.Parent = Frame
 
         Frame.InputBegan:Connect(function(input)
             if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                
-                input:GetPropertyChangedSignal("UserInputState"):Wait()
+                -- Prevent click from propagating to components behind
+                input.Changed:Wait()
                 
                 if isSelected() then
                     for i, selected in pairs(multidropdown.selected) do
@@ -1149,13 +1154,18 @@ function Section:CreateDropdown(config)
     end
 
     local function createOption(optionText, index)
-        local Frame = Instance.new("Frame")
+        local Frame = Instance.new("TextButton")
         Frame.AnchorPoint = Vector2.new(0, 0)
         Frame.Position = UDim2.new(0, 0, 0, 0)
         Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
         Frame.Size = UDim2.new(1, 0, 0, 18)
         Frame.BorderSizePixel = 0
         Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+        Frame.Text = ""
+        Frame.TextTransparency = 1
+        Frame.AutoButtonColor = false
+        Frame.Active = true
+        Frame.SelectionImageObject = nil
         Frame.Parent = Container
 
         local TextLabel = Instance.new("TextLabel")
