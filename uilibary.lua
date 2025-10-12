@@ -51,7 +51,7 @@ Liner.BorderSizePixel = 0
 Liner.BackgroundColor3 = Color3.fromRGB(35, 35, 39)
 Liner.Parent = Header
 
-local Exit_Button = Instance.new("ImageLabel")
+local Exit_Button = Instance.new("ImageButton")
 Exit_Button.ScaleType = Enum.ScaleType.Fit
 Exit_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Exit_Button.Name = "Exit_Button"
