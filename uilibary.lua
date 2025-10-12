@@ -613,7 +613,7 @@ Slider_Value.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         local percentage = (slider.value - slider.min) / (slider.max - slider.min)
         local progressWidth = 222 * percentage
         
-        -- Ensure minimum visible width when at minimum value
+        
         if slider.value == slider.min and slider.min ~= slider.max then
             progressWidth = 2
         end
@@ -811,7 +811,7 @@ UIStroke.Parent = Container
         if multidropdown.open then
             Container.Size = UDim2.new(0, 222, 0, #multidropdown.options * 18 + 4)
             
-            -- Use absolute screen coordinates with perfect alignment
+
             local dropdownAbsolutePos = Dropdown.AbsolutePosition
             local dropdownSize = Dropdown.AbsoluteSize
             local containerX = dropdownAbsolutePos.X
@@ -870,7 +870,7 @@ TextLabel.Parent = Frame
 
         Frame.InputBegan:Connect(function(input)
             if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                -- Prevent the click from propagating to the outside click detector
+                
                 input:GetPropertyChangedSignal("UserInputState"):Wait()
                 
                 if isSelected() then
@@ -915,17 +915,17 @@ TextLabel.Parent = Frame
         end
     end
 
-    -- Register this dropdown for global management
+
     table.insert(OpenDropdowns, {close = closeDropdown, open = function() return multidropdown.open end})
 
    
     UserInputService.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 and multidropdown.open then
-            -- Use spawn to let option clicks process first
+     
             spawn(function()
                 wait(0.01)
                 
-                if not multidropdown.open then return end -- Check if dropdown was closed by option click
+                if not multidropdown.open then return end 
                 
                 local mousePos = UserInputService:GetMouseLocation()
                 local containerPos = Container.AbsolutePosition
@@ -933,7 +933,7 @@ TextLabel.Parent = Frame
                 local dropdownPos = Dropdown.AbsolutePosition
                 local dropdownSize = Dropdown.AbsoluteSize
                 
-                -- Check if click is outside both the dropdown button and the container
+ 
                 local outsideContainer = mousePos.X < containerPos.X or mousePos.X > containerPos.X + containerSize.X or
                                        mousePos.Y < containerPos.Y or mousePos.Y > containerPos.Y + containerSize.Y
                 
@@ -988,6 +988,279 @@ TextLabel.Parent = Frame
 
     table.insert(self.components, multidropdown)
     return multidropdown
+end
+
+function Section:CreateDropdown(config)
+    local dropdown = {}
+    dropdown.config = config or {}
+    dropdown.text = dropdown.config.DropdownText or "Dropdown"
+    dropdown.options = dropdown.config.Options or {}
+    dropdown.callback = dropdown.config.Callback
+    dropdown.selected = dropdown.config.Value or dropdown.options[1] or "None"
+    dropdown.open = false
+
+    local Dropdown_Component = Instance.new("Frame")
+    Dropdown_Component.Name = "Dropdown_Component"
+    Dropdown_Component.BackgroundTransparency = 1
+    Dropdown_Component.Position = UDim2.new(0, 0, 1, 0)
+    Dropdown_Component.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Dropdown_Component.Size = UDim2.new(0, 243, 0, 52)
+    Dropdown_Component.BorderSizePixel = 0
+    Dropdown_Component.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Dropdown_Component.Parent = self.holder
+
+    local Dropdown = Instance.new("TextButton")
+    Dropdown.AnchorPoint = Vector2.new(0, 1)
+    Dropdown.Name = "Dropdown"
+    Dropdown.Position = UDim2.new(0, 12, 1, 0)
+    Dropdown.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Dropdown.Size = UDim2.new(0, 222, 0, 30)
+    Dropdown.BorderSizePixel = 0
+    Dropdown.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+    Dropdown.Text = ""
+    Dropdown.TextTransparency = 1
+    Dropdown.AutoButtonColor = false
+    Dropdown.Active = true
+    Dropdown.SelectionImageObject = nil
+    Dropdown.Parent = Dropdown_Component
+
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(0, 2)
+    UICorner.Parent = Dropdown
+
+    local Option = Instance.new("TextLabel")
+    Option.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+    Option.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Option.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Option.Text = dropdown.selected
+    Option.Name = "Option"
+    Option.AnchorPoint = Vector2.new(0, 0.5)
+    Option.Size = UDim2.new(0, 1, 0, 1)
+    Option.BackgroundTransparency = 1
+    Option.Position = UDim2.new(0, 11, 0.5, 0)
+    Option.BorderSizePixel = 0
+    Option.AutomaticSize = Enum.AutomaticSize.XY
+    Option.TextSize = 14
+    Option.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Option.Parent = Dropdown
+
+    local Icon = Instance.new("ImageLabel")
+    Icon.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Icon.Name = "Icon"
+    Icon.AnchorPoint = Vector2.new(1, 0.5)
+    Icon.Image = "rbxassetid://130094546997037"
+    Icon.BackgroundTransparency = 1
+    Icon.Position = UDim2.new(1, -10, 0.5, 0)
+    Icon.Size = UDim2.new(0, 14, 0, 14)
+    Icon.BorderSizePixel = 0
+    Icon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Icon.Parent = Dropdown
+
+    local Dropdown_Name = Instance.new("TextLabel")
+    Dropdown_Name.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+    Dropdown_Name.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Dropdown_Name.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Dropdown_Name.Text = dropdown.text
+    Dropdown_Name.Name = "Dropdown_Name"
+    Dropdown_Name.Size = UDim2.new(0, 1, 0, 1)
+    Dropdown_Name.BackgroundTransparency = 1
+    Dropdown_Name.Position = UDim2.new(0, 12, 0, 0)
+    Dropdown_Name.BorderSizePixel = 0
+    Dropdown_Name.AutomaticSize = Enum.AutomaticSize.XY
+    Dropdown_Name.TextSize = 14
+    Dropdown_Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Dropdown_Name.Parent = Dropdown_Component
+
+    local Container = Instance.new("Frame")
+    Container.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Container.Size = UDim2.new(0, 222, 0, 0)
+    Container.Name = "Container"
+    Container.Position = UDim2.new(0, 0, 0, 0)
+    Container.BorderSizePixel = 0
+    Container.ZIndex = 100
+    Container.AutomaticSize = Enum.AutomaticSize.Y
+    Container.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+    Container.Parent = ScreenGui
+    Container.Visible = false
+
+    local UIListLayout = Instance.new("UIListLayout")
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIListLayout.Padding = UDim.new(0, 0)
+    UIListLayout.Parent = Container
+
+    local UIPadding = Instance.new("UIPadding")
+    UIPadding.PaddingBottom = UDim.new(0, 2)
+    UIPadding.PaddingTop = UDim.new(0, 2)
+    UIPadding.PaddingLeft = UDim.new(0, 0)
+    UIPadding.PaddingRight = UDim.new(0, 0)
+    UIPadding.Parent = Container
+
+    local UICorner2 = Instance.new("UICorner")
+    UICorner2.CornerRadius = UDim.new(0, 2)
+    UICorner2.Parent = Container
+
+    local UIStroke = Instance.new("UIStroke")
+    UIStroke.Color = Color3.fromRGB(30, 30, 34)
+    UIStroke.Parent = Container
+
+    local function updateOptionText()
+        Option.Text = dropdown.selected
+    end
+
+    local function toggleDropdown()
+        dropdown.open = not dropdown.open
+        Container.Visible = dropdown.open
+        
+        if dropdown.open then
+            Container.Size = UDim2.new(0, 222, 0, #dropdown.options * 18 + 4)
+            
+           
+            local dropdownAbsolutePos = Dropdown.AbsolutePosition
+            local dropdownSize = Dropdown.AbsoluteSize
+            local containerX = dropdownAbsolutePos.X
+            local containerY = dropdownAbsolutePos.Y + dropdownSize.Y
+            
+            Container.Position = UDim2.new(0, containerX, 0, containerY)
+        else
+            Container.Size = UDim2.new(0, 222, 0, 0)
+        end
+    end
+
+    local function closeDropdown()
+        if dropdown.open then
+            dropdown.open = false
+            Container.Visible = false
+            Container.Size = UDim2.new(0, 222, 0, 0)
+        end
+    end
+
+    local function createOption(optionText, index)
+        local Frame = Instance.new("Frame")
+        Frame.AnchorPoint = Vector2.new(0, 0)
+        Frame.Position = UDim2.new(0, 0, 0, 0)
+        Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+        Frame.Size = UDim2.new(1, 0, 0, 18)
+        Frame.BorderSizePixel = 0
+        Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+        Frame.Parent = Container
+
+        local TextLabel = Instance.new("TextLabel")
+        TextLabel.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
+        TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+        TextLabel.Text = optionText
+        TextLabel.AnchorPoint = Vector2.new(0, 0.5)
+        TextLabel.Size = UDim2.new(0, 1, 0, 1)
+        TextLabel.BackgroundTransparency = 1
+        TextLabel.Position = UDim2.new(0, 6, 0.5, 0)
+        TextLabel.BorderSizePixel = 0
+        TextLabel.AutomaticSize = Enum.AutomaticSize.XY
+        TextLabel.TextSize = 14
+        TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        TextLabel.Parent = Frame
+
+        local function isSelected()
+            return dropdown.selected == optionText
+        end
+
+        local function updateOptionAppearance()
+            if isSelected() then
+                TextLabel.TextColor3 = Color3.fromRGB(110, 117, 244)
+            else
+                TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+            end
+        end
+
+        updateOptionAppearance()
+
+        Frame.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                dropdown.selected = optionText
+                updateOptionText()
+                updateOptionAppearance()
+                closeDropdown()
+                
+                if dropdown.callback then
+                    dropdown.callback(dropdown.selected)
+                end
+            end
+        end)
+
+        return Frame
+    end
+
+    for i, option in pairs(dropdown.options) do
+        createOption(option, i)
+    end
+
+    Dropdown.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            toggleDropdown()
+        end
+    end)
+
+
+    table.insert(OpenDropdowns, {close = closeDropdown, open = function() return dropdown.open end})
+
+ 
+    UserInputService.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 and dropdown.open then
+            spawn(function()
+                wait(0.01)
+                
+                if not dropdown.open then return end
+                
+                local mousePos = UserInputService:GetMouseLocation()
+                local containerPos = Container.AbsolutePosition
+                local containerSize = Container.AbsoluteSize
+                local dropdownPos = Dropdown.AbsolutePosition
+                local dropdownSize = Dropdown.AbsoluteSize
+                
+                local outsideContainer = mousePos.X < containerPos.X or mousePos.X > containerPos.X + containerSize.X or
+                                       mousePos.Y < containerPos.Y or mousePos.Y > containerPos.Y + containerSize.Y
+                
+                local outsideDropdown = mousePos.X < dropdownPos.X or mousePos.X > dropdownPos.X + dropdownSize.X or
+                                       mousePos.Y < dropdownPos.Y or mousePos.Y > dropdownPos.Y + dropdownSize.Y
+                
+                if outsideContainer and outsideDropdown then
+                    closeDropdown()
+                end
+            end)
+        end
+    end)
+
+    updateOptionText()
+
+    dropdown.component = Dropdown_Component
+    dropdown.button = Dropdown
+    dropdown.container = Container
+    dropdown.optionLabel = Option
+    
+    function dropdown:Set(selectedOption)
+        dropdown.selected = selectedOption or dropdown.options[1] or "None"
+        updateOptionText()
+        
+        for _, child in pairs(Container:GetChildren()) do
+            if child:IsA("Frame") and child.Name == "Frame" then
+                local textLabel = child:FindFirstChild("TextLabel")
+                if textLabel then
+                    local optionText = textLabel.Text
+                    if optionText == dropdown.selected then
+                        textLabel.TextColor3 = Color3.fromRGB(110, 117, 244)
+                    else
+                        textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    end
+                end
+            end
+        end
+    end
+    
+    function dropdown:Get()
+        return dropdown.selected
+    end
+
+    table.insert(self.components, dropdown)
+    return dropdown
 end
 
 return libary
