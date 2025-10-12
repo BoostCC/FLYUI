@@ -6,6 +6,15 @@ local libary = {}
 local Windows = {}
 local CurrentWindow = nil
 local CurrentTab = nil
+local OpenDropdowns = {}
+
+local function closeAllDropdowns()
+    for _, dropdown in pairs(OpenDropdowns) do
+        if dropdown.open() then
+            dropdown.close()
+        end
+    end
+end
 
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -307,6 +316,8 @@ function Window:CreateTab(tabName)
     
     TabButton.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            closeAllDropdowns()
+            
             for _, child in pairs(Side_Bar:GetChildren()) do
                 if child:IsA("TextLabel") and child.Name:find("Tab_") then
                     child.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
@@ -695,6 +706,8 @@ MultiDropdown_Component.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     Dropdown.Text = ""
     Dropdown.TextTransparency = 1
     Dropdown.AutoButtonColor = false
+    Dropdown.Active = false
+    Dropdown.SelectionImageObject = nil
     Dropdown.Parent = MultiDropdown_Component
 
 local UICorner = Instance.new("UICorner")
@@ -894,29 +907,31 @@ TextLabel.Parent = Frame
         end
     end
 
+    -- Register this dropdown for global management
+    table.insert(OpenDropdowns, {close = closeDropdown, open = function() return multidropdown.open end})
+
    
     UserInputService.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 and multidropdown.open then
             local mousePos = UserInputService:GetMouseLocation()
             local containerPos = Container.AbsolutePosition
             local containerSize = Container.AbsoluteSize
+            local dropdownPos = Dropdown.AbsolutePosition
+            local dropdownSize = Dropdown.AbsoluteSize
             
-          
-            if mousePos.X < containerPos.X or mousePos.X > containerPos.X + containerSize.X or
-               mousePos.Y < containerPos.Y or mousePos.Y > containerPos.Y + containerSize.Y then
+            -- Check if click is outside both the dropdown button and the container
+            local outsideContainer = mousePos.X < containerPos.X or mousePos.X > containerPos.X + containerSize.X or
+                                   mousePos.Y < containerPos.Y or mousePos.Y > containerPos.Y + containerSize.Y
+            
+            local outsideDropdown = mousePos.X < dropdownPos.X or mousePos.X > dropdownPos.X + dropdownSize.X or
+                                   mousePos.Y < dropdownPos.Y or mousePos.Y > dropdownPos.Y + dropdownSize.Y
+            
+            if outsideContainer and outsideDropdown then
                 closeDropdown()
             end
         end
     end)
 
-   
-    if CurrentTab then
-        CurrentTab.tabButton.InputBegan:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                closeDropdown()
-            end
-        end)
-    end
 
     updateOptionText()
 
