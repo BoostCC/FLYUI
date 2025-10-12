@@ -1302,4 +1302,170 @@ function Section:CreateDropdown(config)
     return dropdown
 end
 
+function Section:CreateTextInput(config)
+    local textinput = {}
+    textinput.config = config or {}
+    textinput.text = textinput.config.TextInputText or "Text Input"
+    textinput.placeholder = textinput.config.Placeholder or "Enter text..."
+    textinput.callback = textinput.config.Callback
+    textinput.value = textinput.config.Value or ""
+
+    local TextInput_Component = Instance.new("Frame")
+    TextInput_Component.Name = "TextInput_Component"
+    TextInput_Component.BackgroundTransparency = 1
+    TextInput_Component.Position = UDim2.new(0, 0, 1, 0)
+    TextInput_Component.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    TextInput_Component.Size = UDim2.new(0, 243, 0, 52)
+    TextInput_Component.BorderSizePixel = 0
+    TextInput_Component.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    TextInput_Component.Parent = self.holder
+
+    local TextInput_Name = Instance.new("TextLabel")
+    TextInput_Name.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+    TextInput_Name.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TextInput_Name.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    TextInput_Name.Text = textinput.text
+    TextInput_Name.Name = "TextInput_Name"
+    TextInput_Name.Size = UDim2.new(0, 1, 0, 1)
+    TextInput_Name.BackgroundTransparency = 1
+    TextInput_Name.Position = UDim2.new(0, 12, 0, 0)
+    TextInput_Name.BorderSizePixel = 0
+    TextInput_Name.AutomaticSize = Enum.AutomaticSize.XY
+    TextInput_Name.TextSize = 14
+    TextInput_Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    TextInput_Name.Parent = TextInput_Component
+
+    local TextInput_Box = Instance.new("TextBox")
+    TextInput_Box.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+    TextInput_Box.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TextInput_Box.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    TextInput_Box.Text = textinput.value
+    TextInput_Box.PlaceholderText = textinput.placeholder
+    TextInput_Box.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
+    TextInput_Box.Name = "TextInput_Box"
+    TextInput_Box.Size = UDim2.new(0, 222, 0, 30)
+    TextInput_Box.BackgroundTransparency = 0
+    TextInput_Box.Position = UDim2.new(0, 12, 1, 0)
+    TextInput_Box.BorderSizePixel = 0
+    TextInput_Box.TextSize = 14
+    TextInput_Box.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+    TextInput_Box.TextXAlignment = Enum.TextXAlignment.Left
+    TextInput_Box.TextYAlignment = Enum.TextYAlignment.Center
+    TextInput_Box.Parent = TextInput_Component
+
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(0, 2)
+    UICorner.Parent = TextInput_Box
+
+    local UIPadding = Instance.new("UIPadding")
+    UIPadding.PaddingLeft = UDim.new(0, 8)
+    UIPadding.PaddingRight = UDim.new(0, 8)
+    UIPadding.Parent = TextInput_Box
+
+    TextInput_Box.FocusLost:Connect(function(enterPressed)
+        textinput.value = TextInput_Box.Text
+        if textinput.callback then
+            textinput.callback(textinput.value, enterPressed)
+        end
+    end)
+
+    textinput.component = TextInput_Component
+    textinput.textBox = TextInput_Box
+    textinput.nameLabel = TextInput_Name
+    
+    function textinput:Set(value)
+        textinput.value = value or ""
+        TextInput_Box.Text = textinput.value
+    end
+    
+    function textinput:Get()
+        return textinput.value
+    end
+
+    table.insert(self.components, textinput)
+    return textinput
+end
+
+function Section:CreateButton(config)
+    local button = {}
+    button.config = config or {}
+    button.text = button.config.ButtonText or "Button"
+    button.callback = button.config.Callback
+
+    local Button_Component = Instance.new("Frame")
+    Button_Component.Name = "Button_Component"
+    Button_Component.BackgroundTransparency = 1
+    Button_Component.Position = UDim2.new(0, 0, 1, 0)
+    Button_Component.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Button_Component.Size = UDim2.new(0, 243, 0, 35)
+    Button_Component.BorderSizePixel = 0
+    Button_Component.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Button_Component.Parent = self.holder
+
+    local Button = Instance.new("TextButton")
+    Button.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Button.Text = button.text
+    Button.Name = "Button"
+    Button.Size = UDim2.new(0, 222, 0, 30)
+    Button.BackgroundTransparency = 0
+    Button.Position = UDim2.new(0, 12, 1, 0)
+    Button.BorderSizePixel = 0
+    Button.TextSize = 14
+    Button.BackgroundColor3 = Color3.fromRGB(110, 117, 244)
+    Button.AutoButtonColor = false
+    Button.Active = true
+    Button.SelectionImageObject = nil
+    Button.Parent = Button_Component
+
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(0, 2)
+    UICorner.Parent = Button
+
+    local UIPadding = Instance.new("UIPadding")
+    UIPadding.PaddingLeft = UDim.new(0, 8)
+    UIPadding.PaddingRight = UDim.new(0, 8)
+    UIPadding.Parent = Button
+
+    -- Hover effect
+    local originalColor = Button.BackgroundColor3
+    local hoverColor = Color3.fromRGB(130, 137, 254)
+
+    Button.MouseEnter:Connect(function()
+        Button.BackgroundColor3 = hoverColor
+    end)
+
+    Button.MouseLeave:Connect(function()
+        Button.BackgroundColor3 = originalColor
+    end)
+
+    Button.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            Button.BackgroundColor3 = Color3.fromRGB(90, 97, 224)
+            wait(0.1)
+            Button.BackgroundColor3 = originalColor
+            
+            if button.callback then
+                button.callback()
+            end
+        end
+    end)
+
+    button.component = Button_Component
+    button.button = Button
+    
+    function button:SetText(newText)
+        button.text = newText
+        Button.Text = button.text
+    end
+    
+    function button:GetText()
+        return button.text
+    end
+
+    table.insert(self.components, button)
+    return button
+end
+
 return libary
