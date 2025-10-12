@@ -517,4 +517,152 @@ function Section:CreateToggle(config)
     return toggle
 end
 
+function Section:CreateSlider(config)
+    local slider = {}
+    slider.config = config or {}
+    slider.text = slider.config.SliderText or "Slider"
+    slider.min = slider.config.Min or 0
+    slider.max = slider.config.Max or 100
+    slider.default = slider.config.Value or 50
+    slider.callback = slider.config.Callback
+    
+    slider.value = slider.default
+
+    local SliderComponent = Instance.new("Frame")
+    SliderComponent.Name = "Slider_Component"
+    SliderComponent.BackgroundTransparency = 1
+    SliderComponent.Position = UDim2.new(0, 0, 1, 0)
+    SliderComponent.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    SliderComponent.Size = UDim2.new(0, 243, 0, 38)
+    SliderComponent.BorderSizePixel = 0
+    SliderComponent.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    SliderComponent.Parent = self.holder
+
+    local Slider_Name = Instance.new("TextLabel")
+    Slider_Name.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+    Slider_Name.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Slider_Name.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Slider_Name.Text = slider.text
+    Slider_Name.Name = "Slider_Name"
+    Slider_Name.Size = UDim2.new(0, 1, 0, 1)
+    Slider_Name.BackgroundTransparency = 1
+    Slider_Name.Position = UDim2.new(0, 13, 0, 0)
+    Slider_Name.BorderSizePixel = 0
+    Slider_Name.AutomaticSize = Enum.AutomaticSize.XY
+    Slider_Name.TextSize = 14
+    Slider_Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Slider_Name.Parent = SliderComponent
+
+    local Progress_BG = Instance.new("Frame")
+    Progress_BG.AnchorPoint = Vector2.new(0, 1)
+    Progress_BG.Name = "Progress_BG"
+    Progress_BG.Position = UDim2.new(0, 12, 1, 0)
+    Progress_BG.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Progress_BG.Size = UDim2.new(0, 222, 0, 15)
+    Progress_BG.BorderSizePixel = 0
+    Progress_BG.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+    Progress_BG.Parent = SliderComponent
+
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(0, 2)
+    UICorner.Parent = Progress_BG
+
+    local Progress_Bar = Instance.new("Frame")
+    Progress_Bar.AnchorPoint = Vector2.new(0, 0.5)
+    Progress_Bar.Name = "Progress_Bar"
+    Progress_Bar.Position = UDim2.new(0, 0, 0.5, 0)
+    Progress_Bar.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Progress_Bar.Size = UDim2.new(0, 190, 0, 15)
+    Progress_Bar.BorderSizePixel = 0
+    Progress_Bar.BackgroundColor3 = Color3.fromRGB(110, 117, 244)
+    Progress_Bar.Parent = Progress_BG
+
+    local UICorner2 = Instance.new("UICorner")
+    UICorner2.CornerRadius = UDim.new(0, 2)
+    UICorner2.Parent = Progress_Bar
+
+    local Slider_Value = Instance.new("TextLabel")
+    Slider_Value.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+    Slider_Value.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Slider_Value.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Slider_Value.Text = tostring(slider.value)
+    Slider_Value.Name = "Slider_Value"
+    Slider_Value.AnchorPoint = Vector2.new(1, 0)
+    Slider_Value.Size = UDim2.new(0, 1, 0, 1)
+    Slider_Value.BackgroundTransparency = 1
+    Slider_Value.Position = UDim2.new(1, -13, 0, 0)
+    Slider_Value.BorderSizePixel = 0
+    Slider_Value.AutomaticSize = Enum.AutomaticSize.XY
+    Slider_Value.TextSize = 14
+    Slider_Value.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Slider_Value.Parent = SliderComponent
+
+    local function updateSlider(value)
+        slider.value = math.clamp(value, slider.min, slider.max)
+        local percentage = (slider.value - slider.min) / (slider.max - slider.min)
+        local progressWidth = 222 * percentage
+        
+        Progress_Bar.Size = UDim2.new(0, progressWidth, 0, 15)
+        Slider_Value.Text = tostring(slider.value)
+        
+        if slider.callback then
+            slider.callback(slider.value)
+        end
+    end
+
+    updateSlider(slider.default)
+
+    local dragging = false
+    local connection
+
+    Progress_BG.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            
+            local mousePos = UserInputService:GetMouseLocation()
+            local sliderPos = Progress_BG.AbsolutePosition
+            local sliderSize = Progress_BG.AbsoluteSize
+            local relativeX = mousePos.X - sliderPos.X
+            local percentage = math.clamp(relativeX / sliderSize.X, 0, 1)
+            local newValue = slider.min + (percentage * (slider.max - slider.min))
+            
+            updateSlider(newValue)
+        end
+    end)
+
+    connection = UserInputService.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local mousePos = UserInputService:GetMouseLocation()
+            local sliderPos = Progress_BG.AbsolutePosition
+            local sliderSize = Progress_BG.AbsoluteSize
+            local relativeX = mousePos.X - sliderPos.X
+            local percentage = math.clamp(relativeX / sliderSize.X, 0, 1)
+            local newValue = slider.min + (percentage * (slider.max - slider.min))
+            
+            updateSlider(newValue)
+        end
+    end)
+
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+        end
+    end)
+
+    slider.component = SliderComponent
+    slider.progress = Progress_Bar
+    slider.valueLabel = Slider_Value
+    
+    function slider:Set(value)
+        updateSlider(value)
+    end
+    
+    function slider:Get()
+        return slider.value
+    end
+
+    table.insert(self.components, slider)
+    return slider
+end
+
 return libary
