@@ -684,7 +684,7 @@ function Section:CreateMultidropdown(config)
     MultiDropdown_Component.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     MultiDropdown_Component.Parent = self.holder
 
-    local Dropdown = Instance.new("Frame")
+    local Dropdown = Instance.new("TextButton")
     Dropdown.AnchorPoint = Vector2.new(0, 1)
     Dropdown.Name = "Dropdown"
     Dropdown.Position = UDim2.new(0, 12, 1, 0)
@@ -692,6 +692,8 @@ function Section:CreateMultidropdown(config)
     Dropdown.Size = UDim2.new(0, 222, 0, 30)
     Dropdown.BorderSizePixel = 0
     Dropdown.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+    Dropdown.Text = ""
+    Dropdown.TextTransparency = 1
     Dropdown.Parent = MultiDropdown_Component
 
     local UICorner = Instance.new("UICorner")
@@ -779,11 +781,14 @@ function Section:CreateMultidropdown(config)
     end
 
     local function toggleDropdown()
+        print("Toggle dropdown called! Current state:", multidropdown.open)
         multidropdown.open = not multidropdown.open
         Container.Visible = multidropdown.open
+        print("New state:", multidropdown.open, "Container visible:", Container.Visible)
         
         if multidropdown.open then
             Container.Size = UDim2.new(0, 218, 0, #multidropdown.options * 25 + 13)
+            print("Container size set to:", Container.Size)
         else
             Container.Size = UDim2.new(0, 218, 0, 0)
         end
