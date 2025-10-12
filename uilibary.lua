@@ -603,10 +603,10 @@ function Section:CreateSlider(config)
         local progressWidth = 222 * percentage
         
         Progress_Bar.Size = UDim2.new(0, progressWidth, 0, 15)
-        Slider_Value.Text = tostring(slider.value)
+        Slider_Value.Text = tostring(math.floor(slider.value + 0.5))
         
         if slider.callback then
-            slider.callback(slider.value)
+            slider.callback(math.floor(slider.value + 0.5))
         end
     end
 
