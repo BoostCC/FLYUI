@@ -665,4 +665,222 @@ function Section:CreateSlider(config)
     return slider
 end
 
+function Section:CreateMultidropdown(config)
+    local multidropdown = {}
+    multidropdown.config = config or {}
+    multidropdown.text = multidropdown.config.MultidropdownText or "Multidropdown"
+    multidropdown.options = multidropdown.config.Options or {}
+    multidropdown.callback = multidropdown.config.Callback
+    multidropdown.selected = {}
+    multidropdown.open = false
+
+    local MultidropdownComponent = Instance.new("Frame")
+    MultidropdownComponent.Name = "Multidropdown_Component"
+    MultidropdownComponent.BackgroundTransparency = 1
+    MultidropdownComponent.Position = UDim2.new(0, 0, 1, 0)
+    MultidropdownComponent.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    MultidropdownComponent.Size = UDim2.new(0, 243, 0, 35)
+    MultidropdownComponent.BorderSizePixel = 0
+    MultidropdownComponent.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    MultidropdownComponent.Parent = self.holder
+
+    local Multidropdown_Name = Instance.new("TextLabel")
+    Multidropdown_Name.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+    Multidropdown_Name.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Multidropdown_Name.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Multidropdown_Name.Text = multidropdown.text
+    Multidropdown_Name.Name = "Multidropdown_Name"
+    Multidropdown_Name.Size = UDim2.new(0, 1, 0, 1)
+    Multidropdown_Name.BackgroundTransparency = 1
+    Multidropdown_Name.Position = UDim2.new(0, 13, 0, 0)
+    Multidropdown_Name.BorderSizePixel = 0
+    Multidropdown_Name.AutomaticSize = Enum.AutomaticSize.XY
+    Multidropdown_Name.TextSize = 14
+    Multidropdown_Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Multidropdown_Name.Parent = MultidropdownComponent
+
+    local Multidropdown_Button = Instance.new("TextButton")
+    Multidropdown_Button.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+    Multidropdown_Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Multidropdown_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Multidropdown_Button.Text = "None"
+    Multidropdown_Button.Name = "Multidropdown_Button"
+    Multidropdown_Button.Size = UDim2.new(0, 222, 0, 15)
+    Multidropdown_Button.BackgroundTransparency = 0
+    Multidropdown_Button.Position = UDim2.new(0, 12, 1, 0)
+    Multidropdown_Button.BorderSizePixel = 0
+    Multidropdown_Button.TextSize = 14
+    Multidropdown_Button.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+    Multidropdown_Button.Parent = MultidropdownComponent
+
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(0, 2)
+    UICorner.Parent = Multidropdown_Button
+
+    local Dropdown_List = Instance.new("ScrollingFrame")
+    Dropdown_List.Name = "Dropdown_List"
+    Dropdown_List.BackgroundTransparency = 0
+    Dropdown_List.Position = UDim2.new(0, 12, 1, 15)
+    Dropdown_List.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Dropdown_List.Size = UDim2.new(0, 222, 0, 0)
+    Dropdown_List.BorderSizePixel = 0
+    Dropdown_List.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+    Dropdown_List.ScrollBarThickness = 0
+    Dropdown_List.CanvasSize = UDim2.new(0, 0, 0, 0)
+    Dropdown_List.Parent = MultidropdownComponent
+
+    local UICorner2 = Instance.new("UICorner")
+    UICorner2.CornerRadius = UDim.new(0, 2)
+    UICorner2.Parent = Dropdown_List
+
+    local UIListLayout = Instance.new("UIListLayout")
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIListLayout.Parent = Dropdown_List
+
+    local function updateButtonText()
+        if #multidropdown.selected == 0 then
+            Multidropdown_Button.Text = "None"
+        elseif #multidropdown.selected == 1 then
+            Multidropdown_Button.Text = multidropdown.selected[1]
+        else
+            Multidropdown_Button.Text = #multidropdown.selected .. " selected"
+        end
+    end
+
+    local function toggleDropdown()
+        multidropdown.open = not multidropdown.open
+        
+        if multidropdown.open then
+            Dropdown_List.Size = UDim2.new(0, 222, 0, math.min(#multidropdown.options * 20, 100))
+            Dropdown_List.CanvasSize = UDim2.new(0, 0, 0, #multidropdown.options * 20)
+        else
+            Dropdown_List.Size = UDim2.new(0, 222, 0, 0)
+        end
+    end
+
+    local function createOption(option, index)
+        local Option_Button = Instance.new("TextButton")
+        Option_Button.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+        Option_Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Option_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+        Option_Button.Text = option
+        Option_Button.Name = "Option_" .. index
+        Option_Button.Size = UDim2.new(0, 222, 0, 20)
+        Option_Button.BackgroundTransparency = 0
+        Option_Button.BorderSizePixel = 0
+        Option_Button.TextSize = 14
+        Option_Button.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+        Option_Button.Parent = Dropdown_List
+
+        local Check_Icon = Instance.new("ImageLabel")
+        Check_Icon.Image = "rbxassetid://6031094678"
+        Check_Icon.Name = "Check_Icon"
+        Check_Icon.ImageColor3 = Color3.fromRGB(110, 117, 244)
+        Check_Icon.Size = UDim2.new(0, 12, 0, 12)
+        Check_Icon.BackgroundTransparency = 1
+        Check_Icon.Position = UDim2.new(0, 5, 0, 4)
+        Check_Icon.BorderColor3 = Color3.fromRGB(0, 0, 0)
+        Check_Icon.BorderSizePixel = 0
+        Check_Icon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        Check_Icon.Parent = Option_Button
+
+        local function isSelected()
+            for _, selected in pairs(multidropdown.selected) do
+                if selected == option then
+                    return true
+                end
+            end
+            return false
+        end
+
+        local function updateOptionAppearance()
+            if isSelected() then
+                Check_Icon.Visible = true
+                Option_Button.BackgroundColor3 = Color3.fromRGB(35, 35, 38)
+            else
+                Check_Icon.Visible = false
+                Option_Button.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+            end
+        end
+
+        updateOptionAppearance()
+
+        Option_Button.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                if isSelected() then
+                    for i, selected in pairs(multidropdown.selected) do
+                        if selected == option then
+                            table.remove(multidropdown.selected, i)
+                            break
+                        end
+                    end
+                else
+                    table.insert(multidropdown.selected, option)
+                end
+                
+                updateOptionAppearance()
+                updateButtonText()
+                
+                if multidropdown.callback then
+                    multidropdown.callback(multidropdown.selected)
+                end
+            end
+        end)
+
+        return Option_Button
+    end
+
+    for i, option in pairs(multidropdown.options) do
+        createOption(option, i)
+    end
+
+    Multidropdown_Button.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            toggleDropdown()
+        end
+    end)
+
+    updateButtonText()
+
+    multidropdown.component = MultidropdownComponent
+    multidropdown.button = Multidropdown_Button
+    multidropdown.list = Dropdown_List
+    
+    function multidropdown:Set(selectedOptions)
+        multidropdown.selected = selectedOptions or {}
+        updateButtonText()
+        
+        for _, child in pairs(Dropdown_List:GetChildren()) do
+            if child:IsA("TextButton") and child.Name:match("Option_") then
+                local option = child.Text
+                local isSelected = false
+                for _, selected in pairs(multidropdown.selected) do
+                    if selected == option then
+                        isSelected = true
+                        break
+                    end
+                end
+                
+                local checkIcon = child:FindFirstChild("Check_Icon")
+                if checkIcon then
+                    checkIcon.Visible = isSelected
+                end
+                
+                if isSelected then
+                    child.BackgroundColor3 = Color3.fromRGB(35, 35, 38)
+                else
+                    child.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+                end
+            end
+        end
+    end
+    
+    function multidropdown:Get()
+        return multidropdown.selected
+    end
+
+    table.insert(self.components, multidropdown)
+    return multidropdown
+end
+
 return libary
