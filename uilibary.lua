@@ -760,8 +760,10 @@ function Section:CreateMultidropdown(config)
     UIListLayout.Parent = Container
 
     local UIPadding = Instance.new("UIPadding")
-    UIPadding.PaddingBottom = UDim.new(0, 8)
+    UIPadding.PaddingBottom = UDim.new(0, 5)
     UIPadding.PaddingTop = UDim.new(0, 5)
+    UIPadding.PaddingLeft = UDim.new(0, 3)
+    UIPadding.PaddingRight = UDim.new(0, 3)
     UIPadding.Parent = Container
 
     local UICorner2 = Instance.new("UICorner")
@@ -787,7 +789,7 @@ function Section:CreateMultidropdown(config)
         print("New state:", multidropdown.open, "Container visible:", Container.Visible)
         
         if multidropdown.open then
-            Container.Size = UDim2.new(0, 218, 0, #multidropdown.options * 25 + 13)
+            Container.Size = UDim2.new(0, 218, 0, #multidropdown.options * 20 + 10)
             
             -- Use absolute screen coordinates
             local dropdownAbsolutePos = Dropdown.AbsolutePosition
@@ -804,10 +806,10 @@ function Section:CreateMultidropdown(config)
 
     local function createOption(optionText, index)
         local Frame = Instance.new("Frame")
-        Frame.AnchorPoint = Vector2.new(0.5, 0.5)
-        Frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+        Frame.AnchorPoint = Vector2.new(0, 0)
+        Frame.Position = UDim2.new(0, 0, 0, 0)
         Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-        Frame.Size = UDim2.new(0, 210, 0, 20)
+        Frame.Size = UDim2.new(1, 0, 0, 20)
         Frame.BorderSizePixel = 0
         Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
         Frame.Parent = Container
@@ -820,7 +822,7 @@ function Section:CreateMultidropdown(config)
         TextLabel.AnchorPoint = Vector2.new(0, 0.5)
         TextLabel.Size = UDim2.new(0, 1, 0, 1)
         TextLabel.BackgroundTransparency = 1
-        TextLabel.Position = UDim2.new(0.03584229573607445, 0, 0.5, 0)
+        TextLabel.Position = UDim2.new(0, 8, 0.5, 0)
         TextLabel.BorderSizePixel = 0
         TextLabel.AutomaticSize = Enum.AutomaticSize.XY
         TextLabel.TextSize = 16
