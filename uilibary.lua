@@ -685,16 +685,17 @@ MultiDropdown_Component.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     MultiDropdown_Component.Parent = self.holder
 
     local Dropdown = Instance.new("TextButton")
-Dropdown.AnchorPoint = Vector2.new(0, 1)
-Dropdown.Name = "Dropdown"
-Dropdown.Position = UDim2.new(0, 12, 1, 0)
-Dropdown.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Dropdown.Size = UDim2.new(0, 222, 0, 30)
-Dropdown.BorderSizePixel = 0
-Dropdown.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+    Dropdown.AnchorPoint = Vector2.new(0, 1)
+    Dropdown.Name = "Dropdown"
+    Dropdown.Position = UDim2.new(0, 12, 1, 0)
+    Dropdown.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Dropdown.Size = UDim2.new(0, 222, 0, 30)
+    Dropdown.BorderSizePixel = 0
+    Dropdown.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
     Dropdown.Text = ""
     Dropdown.TextTransparency = 1
-Dropdown.Parent = MultiDropdown_Component
+    Dropdown.AutoButtonColor = false
+    Dropdown.Parent = MultiDropdown_Component
 
 local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 2)
@@ -883,6 +884,39 @@ TextLabel.Parent = Frame
             toggleDropdown()
         end
     end)
+
+
+    local function closeDropdown()
+        if multidropdown.open then
+            multidropdown.open = false
+            Container.Visible = false
+            Container.Size = UDim2.new(0, 222, 0, 0)
+        end
+    end
+
+   
+    UserInputService.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 and multidropdown.open then
+            local mousePos = UserInputService:GetMouseLocation()
+            local containerPos = Container.AbsolutePosition
+            local containerSize = Container.AbsoluteSize
+            
+          
+            if mousePos.X < containerPos.X or mousePos.X > containerPos.X + containerSize.X or
+               mousePos.Y < containerPos.Y or mousePos.Y > containerPos.Y + containerSize.Y then
+                closeDropdown()
+            end
+        end
+    end)
+
+   
+    if CurrentTab then
+        CurrentTab.tabButton.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                closeDropdown()
+            end
+        end)
+    end
 
     updateOptionText()
 
