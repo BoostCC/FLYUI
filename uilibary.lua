@@ -752,7 +752,7 @@ function Section:CreateMultidropdown(config)
     Container.ZIndex = 50
     Container.AutomaticSize = Enum.AutomaticSize.Y
     Container.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
-    Container.Parent = MultiDropdown_Component
+    Container.Parent = MainFrame
     Container.Visible = false
 
     local UIListLayout = Instance.new("UIListLayout")
@@ -788,7 +788,15 @@ function Section:CreateMultidropdown(config)
         
         if multidropdown.open then
             Container.Size = UDim2.new(0, 218, 0, #multidropdown.options * 25 + 13)
-            print("Container size set to:", Container.Size)
+            
+            -- Calculate absolute position relative to MainFrame
+            local dropdownAbsolutePos = Dropdown.AbsolutePosition
+            local mainFrameAbsolutePos = MainFrame.AbsolutePosition
+            local relativeX = dropdownAbsolutePos.X - mainFrameAbsolutePos.X
+            local relativeY = dropdownAbsolutePos.Y - mainFrameAbsolutePos.Y + Dropdown.AbsoluteSize.Y
+            
+            Container.Position = UDim2.new(0, relativeX, 0, relativeY)
+            print("Container size set to:", Container.Size, "Position:", Container.Position)
         else
             Container.Size = UDim2.new(0, 218, 0, 0)
         end
