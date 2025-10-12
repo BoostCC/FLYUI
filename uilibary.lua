@@ -429,4 +429,92 @@ function Tab:CreateSection(config)
     return section
 end
 
+function Section:CreateToggle(config)
+    local toggle = {}
+    toggle.config = config
+    toggle.state = false
+    
+    local ToggleComponent = Instance.new("Frame")
+    ToggleComponent.BackgroundTransparency = 1
+    ToggleComponent.Name = "Toggle_Component"
+    ToggleComponent.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    ToggleComponent.Size = UDim2.new(0, 243, 0, 35)
+    ToggleComponent.BorderSizePixel = 0
+    ToggleComponent.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    ToggleComponent.Parent = self.holder
+    
+    local Toggle = Instance.new("Frame")
+    Toggle.AnchorPoint = Vector2.new(0, 0.5)
+    Toggle.Name = "Toggle"
+    Toggle.Position = UDim2.new(0, 12, 0.5, 0)
+    Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Toggle.Size = UDim2.new(0, 20, 0, 20)
+    Toggle.BorderSizePixel = 0
+    Toggle.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+    Toggle.Parent = ToggleComponent
+    
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(0, 2)
+    UICorner.Parent = Toggle
+    
+    local Check = Instance.new("ImageLabel")
+    Check.ImageColor3 = Color3.fromRGB(21, 21, 23)
+    Check.ScaleType = Enum.ScaleType.Fit
+    Check.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Check.Name = "Check"
+    Check.AnchorPoint = Vector2.new(0.5, 0.5)
+    Check.Image = "rbxassetid://80408732868542"
+    Check.BackgroundTransparency = 1
+    Check.Position = UDim2.new(0.5, 0, 0.5, 0)
+    Check.Size = UDim2.new(0, 12, 0, 10)
+    Check.BorderSizePixel = 0
+    Check.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Check.Parent = Toggle
+    Check.Visible = false
+    
+    local Toggle_Name = Instance.new("TextLabel")
+    Toggle_Name.FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+    Toggle_Name.TextColor3 = Color3.fromRGB(103, 103, 104)
+    Toggle_Name.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Toggle_Name.Text = config.ToggleText
+    Toggle_Name.Name = "Toggle_Name"
+    Toggle_Name.AnchorPoint = Vector2.new(0, 0.5)
+    Toggle_Name.Size = UDim2.new(0, 1, 0, 1)
+    Toggle_Name.BackgroundTransparency = 1
+    Toggle_Name.Position = UDim2.new(0, 43, 0.5, 0)
+    Toggle_Name.BorderSizePixel = 0
+    Toggle_Name.AutomaticSize = Enum.AutomaticSize.XY
+    Toggle_Name.TextSize = 14
+    Toggle_Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Toggle_Name.Parent = ToggleComponent
+    
+    ToggleComponent.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            toggle.state = not toggle.state
+            
+            if toggle.state then
+                Toggle.BackgroundColor3 = Color3.fromRGB(110, 117, 244)
+                Toggle_Name.TextColor3 = Color3.fromRGB(255, 255, 255)
+                Check.Visible = true
+            else
+                Toggle.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+                Toggle_Name.TextColor3 = Color3.fromRGB(103, 103, 104)
+                Check.Visible = false
+            end
+            
+            if config.Callback then
+                config.Callback(toggle.state)
+            end
+        end
+    end)
+    
+    toggle.component = ToggleComponent
+    toggle.toggle = Toggle
+    toggle.check = Check
+    toggle.text = Toggle_Name
+    
+    table.insert(self.components, toggle)
+    return toggle
+end
+
 return libary
