@@ -624,7 +624,7 @@ function Section:CreateSlider(config)
             local sliderSize = Progress_BG.AbsoluteSize
             local relativeX = mousePos.X - sliderPos.X
             local percentage = math.clamp(relativeX / sliderSize.X, 0, 1)
-            local newValue = slider.min + (percentage * (slider.max - slider.min))
+            local newValue = math.floor(slider.min + (percentage * (slider.max - slider.min)) + 0.5)
             
             updateSlider(newValue)
         end
@@ -637,7 +637,7 @@ function Section:CreateSlider(config)
             local sliderSize = Progress_BG.AbsoluteSize
             local relativeX = mousePos.X - sliderPos.X
             local percentage = math.clamp(relativeX / sliderSize.X, 0, 1)
-            local newValue = slider.min + (percentage * (slider.max - slider.min))
+            local newValue = math.floor(slider.min + (percentage * (slider.max - slider.min)) + 0.5)
             
             updateSlider(newValue)
         end
